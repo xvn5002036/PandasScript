@@ -23,20 +23,22 @@ function Go; function Disp; function Pick; function Restrict;
 //	Main Menu:
 // --------------------------------------------------
 
-menu	"Last Warp ^777777["+lastwarp$+"]^000000",-,
-    	" ~ Towns",Towns,
-    	" ~ Fields",Fields,
-    	" ~ Dungeons",Dungeons,
-    	" ~ Guild Castles",Castles,
-    	" ~ Guild Dungeons",Guild_Dungeons,
-    	" ~ Instances",Instances,
-    	" ~ Special Areas",Special;
+menu	"最後傳送 ^777777["+lastwarp$+"]^000000",-,
+		" ~ 城鎮",Towns,
+		" ~ 田野",Fields,
+		" ~ 地下城",Dungeons,
+		" ~ 公會城堡",Castles,
+		" ~ 公會地下城",Guild_Dungeons,
+		" ~ 實例",Instances,
+		" ~ 特殊區域",Special;
+
 
 	if (lastwarp$ == "")
-		message strcharinfo(0),"You haven't warped anywhere yet.";
+		message strcharinfo(0),"你還沒傳送到任何地方。";
 	else
-		warp lastwarp$,lastwarpx,lastwarpy;
+		warp lastwarp$, lastwarpx, lastwarpy;
 	end;
+	
 
 // ------------------- Functions -------------------
 // * Go("<map>",<x>,<y>);
@@ -100,7 +102,7 @@ function Pick {
 		set .@map$, getarg(0)+((.@i<10)?"0":"")+.@i;
 	}
 	if (.@warp_block & (1<<.@select)) {
-		message strcharinfo(0),"This map is not enabled in "+((checkre(0))?"":"Pre-")+"Renewal.";
+		message strcharinfo(0),"這張地圖在"+((checkre(0))?"":"Pre-")+"Renewal.";
 		end;
 	}
 	set .@x, @c[.@i*2];
@@ -116,7 +118,7 @@ function Restrict {
 			for (set .@i,1; .@i<getargcount(); set .@i,.@i+1)
 				set @warp_block, @warp_block | (1<<getarg(.@i));
 		} else {
-			message strcharinfo(0),"This map is not enabled in "+((checkre(0))?"":"Pre-")+"Renewal.";
+			message strcharinfo(0),"這張地圖在"+((checkre(0))?"":"Pre-")+"Renewal.";
 			end;
 		}
 	}
@@ -126,16 +128,15 @@ function Restrict {
 // --------------------------------------------------
 	Towns:
 // --------------------------------------------------
-menu	"Prontera",T1, "Alberta",T2, "Aldebaran",T3, "Amatsu",T4, "Ayothaya",T5,
-    	"Brasilis",T6, "Comodo",T7, "Dewata",T8, "Eclage",T9, "Einbech",T10,
-		"Einbroch",T11, "El Dicastes",T12, "Geffen",T13, "Hugel",T14, "Ice Castle",T15,
-		"Izlude",T16, "Jawaii",T17, "Juno",T18, "Kunlun",T19, "Lasagna",T20,
-		"Lighthalzen",T21, "Luoyang",T22, "Lutie",T23, "Malangdo",T24, "Malaya",T25,
-		"Manuk",T26, "Midgarts Expedition Camp",T27, "Mora",T28, "Morocc",T29, "Moscovia",T30,
-		"Nameless Island (Day)",T31, "Nameless Island (Night)",T32, "Niflheim",T33, "Payon",T34, "Rachel",T35,
-		"Rockridge",T36, "Special Security Area, Cor",T37, "Splendide",T38, "Thor Camp",T39, "Umbala",T40,
-		"Varmundt's Mansion",T41, "Veins",T42, "Verus Findspot",T43, "Wolf Village",T44;
-
+menu	"普隆德拉",T1, "阿爾伯塔",T2, "阿爾德巴蘭",T3, "天之道",T4, "阿尤塔亞",T5,
+		"巴西利斯",T6, "科摩多",T7, "德瓦塔",T8, "埃克拉格",T9, "艾因貝克",T10,
+		"艾因布羅赫",T11, "埃爾迪卡斯特",T12, "吉芬",T13, "休耕",T14, "冰之城",T15,
+		"伊茲魯德",T16, "吉瓦伊",T17, "朱諾",T18, "崑崙",T19, "拉薩尼亞",T20,
+		"光之城",T21, "洛陽",T22, "露蒂",T23, "馬朗多",T24, "馬來亞",T25,
+		"馬努克",T26, "米德加爾特探險營",T27, "莫拉",T28, "摩洛哥",T29, "莫斯科維亞",T30,
+		"無名島（白天）",T31, "無名島（夜晚）",T32, "尼夫海姆",T33, "佩永",T34, "雷切爾",T35,
+		"岩石峽谷",T36, "特別安全區域，科爾",T37, "斯坎地",T38, "索爾營地",T39, "烏姆巴拉",T40,
+		"瓦爾蒙特的莊園",T41, "維恩斯",T42, "維魯斯尋覓地",T43, "狼村",T44;
 T1: Go("prontera",155,183);
 T2: Go("alberta",28,234);
 T3: Go("aldebaran",140,131);
@@ -199,17 +200,17 @@ T44: Restrict("RE");
 	Fields:
 // --------------------------------------------------
 @f = true;
-menu	"Amatsu Fields",F1, "Ayothaya Fields",F2, "Bifrost Fields", F3,
-    	"Brasilis Fields",F4, "Comodo Fields",F5, "Dewata Fields",F6,
-    	"Eclage Fields",F7, "Einbroch Fields",F8, "El Dicastes Fields",F9,
-    	"Frozen Scale Fields",F10, "Geffen Fields",F11, "Grey Wolf Forest",F12,
-		"Hugel Fields",F13, "Juno Fields",F14, "Kiwawa Desert",F15,
-		"Kunlun Fields",F16, "Lasagna Fields",F17, "Lighthalzen Fields",F18,
-		"Luoyang Field",F19, "Lutie Field",F20, "Malaya Fields",F21,
-		"Manuk Fields",F22, "Mjolnir Fields",F23, "Moscovia Fields",F24,
-		"Niflheim Fields",F25, "Payon Forests",F26, "Prontera Fields",F27,
-		"Rachel Fields",F28, "Sograt Deserts",F29, "Splendide Fields",F30,
-		"Umbala Fields",F31, "Veins Fields",F32;
+menu "天照田野", F1, "阿耀泰亞田野", F2, "比佛洛斯田野", F3,
+	  "巴西利斯田野", F4, "科摩多田野", F5, "德瓦塔田野", F6,
+	  "艾克拉吉田野", F7, "艾因布洛赫田野", F8, "埃爾迪卡斯特田野", F9,
+	  "冰封鱗片田野", F10, "喬芬田野", F11, "灰狼森林", F12,
+	  "休格田野", F13, "朱諾田野", F14, "基瓦瓦沙漠", F15,
+	  "崑崙田野", F16, "拉薩尼亞田野", F17, "光之哈茲田野", F18,
+	  "洛陽田野", F19, "露蒂田野", F20, "馬來亞田野", F21,
+	  "馬努克田野", F22, "米喬爾尼爾田野", F23, "摩斯科維亞田野", F24,
+	  "尼夫海姆田野", F25, "佩雲森林", F26, "普隆德拉田野", F27,
+	  "蕾切爾田野", F28, "索格拉特沙漠", F29, "斯普倫迪德田野", F30,
+	  "烏姆巴拉田野", F31, "維恩斯田野", F32;
 
 F1: setarray @c[2],190,197;
 	Disp("Amatsu Field",1,1); Pick("ama_fild");
@@ -304,24 +305,25 @@ F32: Restrict("Pre-RE",5);
 	Dungeons:
 // --------------------------------------------------
 @d = true;
-menu	"Abandoned Lab Amicitia",D1, "Abyss Lakes",D2, "Amatsu Dungeon",D3,
-		"Anthell",D4, "Ayothaya Dungeon",D5, "Beach Dungeon",D6,
-		"Bifrost Tower",D7, "Bio Labs",D8, "Brasilis Dungeon",D9,
-		"Byalan Dungeon",D10, "Clock Tower",D11, "Coal Mines",D12,
-		"Culvert",D13, "Cursed Abbey",D14, "Dewata Dungeon",D15,
-		"Einbroch Dungeon",D16, "Flame Basin",D17, "Gefenia",D18,
-		"Geffen Dungeon",D19, "Glast Heim",D20, "Hidden Dungeon",D21,
-		"Ice Dungeon",D22, "Illusion Dungeon",D23, "Issgard Dungeon",D24,
-		"Juperos",D25, "Kiel Dungeon",D26, "Kunlun Dungeon",D27,
-		"Lasagna Dungeon",D28, "Luoyang Dungeon",D29, "Magma Dungeon",D30,
-		"Malangdo Dungeon",D31, "Moscovia Dungeon",D32, "Nidhogg's Dungeon",D33,
-		"Niflheim Dungeon",D34, "Odin Temple",D35, "Orc Dungeon",D36,
-		"Oz Labyrinth Dungeon",D37, "Payon Dungeon",D38, "Prontera Underground",D39,
-		"Pyramids",D40, "Rachel Sanctuary",D41, "Rock Ridge Dungeon",D42,
-		"Rudus Dungeon",D43, "Scaraba Hole",D44, "Sphinx",D45,
-		"Sunken Ship",D46, "Thanatos Tower",D47, "Thor Volcano",D48,
-		"Toy Factory",D49, "Turtle Dungeon",D50, "Umbala Dungeon",D51,
-		"Varmundt's Dungeon",D52, "Verus Area",D53;
+menu "被遺棄的實驗室友誼",D1, "深淵湖",D2, "天照大御神地牢",D3,
+		"蟻穴",D4, "阿優塔雅地牢",D5, "海灘地牢",D6,
+		"比佛利塔",D7, "生物實驗室",D8, "巴西利斯地牢",D9,
+		"比亞藍地牢",D10, "鐘樓",D11, "煤礦",D12,
+		"下水道",D13, "詛咒修道院",D14, "德瓦塔地牢",D15,
+		"艾因布羅赫地牢",D16, "火焰盆地",D17, "基芬尼亞",D18,
+		"基芬地牢",D19, "格拉斯海姆",D20, "隱藏的地牢",D21,
+		"冰地牢",D22, "幻影地牢",D23, "伊斯卡德地牢",D24,
+		"朱佩洛斯",D25, "基爾地牢",D26, "崑崙地牢",D27,
+		"拉薩尼亞地牢",D28, "洛陽地牢",D29, "熔岩地牢",D30,
+		"馬朗多地牢",D31, "莫斯科維亞地牢",D32, "尼赫爾海姆地牢",D33,
+		"尼夫海姆地牢",D34, "奧丁神廟",D35, "獸人地牢",D36,
+		"奧茲迷宮地牢",D37, "佩永地牢",D38, "普隆德拉地下",D39,
+		"金字塔",D40, "蕾切爾聖所",D41, "岩石嶙峋地牢",D42,
+		"魯杜斯地牢",D43, "斯卡拉巴洞",D44, "斯芬克斯",D45,
+		"沉船",D46, "塔那托斯之塔",D47, "索爾火山",D48,
+		"玩具工廠",D49, "海龜地牢",D50, "安巴拉地牢",D51,
+		"瓦爾蒙德的地牢",D52, "韋魯斯區域",D53;
+
 
 D1: Restrict("RE");
 	setarray @c[2],253,244,145,278;
@@ -379,9 +381,10 @@ D21: setarray @c[2],99,31,93,20,182,88;
 	 Disp("Hidden Dungeon",1,3); Pick("prt_maze");
 D22: setarray @c[2],157,14,151,155,149,22,33,158;
 	 Disp("Ice Dungeon",1,4); Pick("ice_dun");
-D23: menu	"Illusion of Abyss",SubD1, "Illusion of Frozen",SubD2, "Illusion of Labyrinth",SubD3,
-			"Illusion of Luanda",SubD4, "Illusion of Moonlight",SubD5, "Illusion of Teddy Bear",SubD6,
-			"Illusion of Twins",SubD7, "Illusion of Underwater",SubD8, "Illusion of Vampire",SubD9;
+D23:menu	"深淵的幻影",SubD1, "冰封的幻影",SubD2, "迷宮的幻影",SubD3,
+		"盧安達的幻影",SubD4, "月光的幻影",SubD5, "泰迪熊的幻影",SubD6,
+		"雙胞胎的幻影",SubD7, "水下的幻影",SubD8, "吸血鬼的幻影",SubD9;
+
 	SubD1: Restrict("RE");
 		   setarray @c[2],132,189,99,186;
 		   Disp("Desolate Village:Bleak Turtle Palace"); Pick("","tur_d03_i","tur_d04_i");
@@ -485,9 +488,9 @@ D53: Restrict("RE");
 // --------------------------------------------------
 	Castles:
 // --------------------------------------------------
-menu	"[FE] Aldebaran Castles",C1, "[FE] Geffen Castles",C2, "[FE] Payon Castles",C3,
-    	"[FE] Prontera Castles",C4, "[SE] Arunafeltz Castles",C5, "[SE] Schwarzwald Castles",C6,
-		"[TE] Aldebaran Castles",C7, "[TE] Prontera Castles",C8;
+menu	"[FE] 阿爾德巴蘭城堡",C1, "[FE] 葛菲城堡",C2, "[FE] 派揚城堡",C3,
+		"[FE] 普隆德城堡",C4, "[SE] 阿魯納費爾茲城堡",C5, "[SE] 施瓦茨瓦爾德城堡",C6,
+		"[TE] 阿爾德巴蘭城堡",C7, "[TE] 普隆德城堡",C8;
 
 C1: setarray @c[2],48,83,95,249,142,85,239,242,264,90;
 	Disp("Neuschwanstein:Hohenschwangau:Nuenberg:Wuerzburg:Rothenburg");
@@ -519,9 +522,10 @@ C8: Restrict("RE");
 // --------------------------------------------------
 	Guild_Dungeons:
 // --------------------------------------------------
-menu	"Baldur",G1, "Luina",G2, "Valkyrie",G3, "Britoniah",G4,
-    	"Arunafeltz",G5, "Schwarzwald",G6, "Kafragarten",G7,
-		"Gloria",G8;
+menu	"巴爾杜爾",G1, "盧伊那",G2, "女武神",G3, "布里托尼亞",G4,
+		"阿魯納費尔茨",G5, "施瓦茨瓦爾德",G6, "卡夫拉加滕",G7,
+		"格洛里亞",G8;
+
 
 G1: Restrict("RE",2,3);
 	setarray @c[2],119,93,119,93,120,130;
@@ -549,13 +553,13 @@ G8: Restrict("RE");
 // --------------------------------------------------
 	Instances:
 // --------------------------------------------------
-menu	"Bakonawa Lake",I1, "Bangungot Hospital 2F",I2, "Buwaya Cave",I3,
-		"Devil Tower",I4, "Eclage Interior",I5, "Endless Tower",I6,
-		"Faceworms Nest",I7, "Geffen Magic Tournament",I8, "Ghost Palace",I9,
-		"Hazy Forest",I10, "Horror Toy Factory",I11, "Malangdo Culvert",I12,
-		"Nidhoggur's Nest",I13, "Octopus Cave",I14, "Old Glast Heim",I15,
-		"Orc's Memory",I16, "Sarah and Fenrir",I17, "Sara Memory",I18,
-		"Sealed Shrine",I19, "Wolfchev's Laboratory",I20;
+menu  "巴科納瓦湖", I1, "班貝古特醫院 2F", I2, "鱷魚洞", I3,
+	  "魔塔", I4, "艾克拉奇內部", I5, "無盡塔", I6,
+	  "面蟲巢穴", I7, "杰芬魔法比賽", I8, "鬼魂宮殿", I9,
+	  "霧霭森林", I10, "恐怖玩具工廠", I11, "馬蘭多涵洞", I12,
+	  "尼德霍古爾的巢穴", I13, "章魚洞", I14, "舊格拉斯海姆", I15,
+	  "獸人記憶", I16, "薩拉和芬里爾", I17, "薩拉的記憶", I18,
+	  "封印神社", I19, "沃爾夫切夫的實驗室", I20;
 
 I1: Restrict("RE");
 	Go("ma_scene01",172,175);
@@ -597,9 +601,10 @@ I20: Restrict("RE");
 // --------------------------------------------------
 	Special:
 // --------------------------------------------------
-menu	"Auction Hall",S1, "Battlegrounds",S2, "Casino",S3, "Dimensional Rift",S4,
-		"Eden Group Headquarters",S5, "Kunlun Arena",S6, "Izlude Arena",S7, 
-		"Monster Race Arena",S8, "Para Market",S9, "Turbo Track",S10;
+menu  "拍賣廳",S1, "戰場",S2, "賭場",S3, "維度裂縫",S4,
+		"伊甸小組總部",S5, "崑崙競技場",S6, "伊士魯德競技場",S7, 
+		"怪物競賽競技場",S8, "Para 市場",S9, "渦輪賽道",S10;
+
 
 S1: Go("auction_01",22,68);
 S2: Go("bat_room",154,150);
@@ -1317,10 +1322,11 @@ OnNaviGenerate:
 	}
 
 OnInit:
-	.Satan_Morocc = true;	//	false will enable moc_fild 4,5,6,8,9,10,14,15 while disable moc_fild 20,21,22 Default is true.
-	.OnlyFirstFld = false;	//	true will teleport to the first level of the Fields  Default is false.
-	.OnlyFirstDun = false;	//	true will teleport to the first level of the Dungeons  Default is false.
+	.Satan_Morocc = true;	//	false 將啟用 moc_fild 4,5,6,8,9,10,14,15，同時禁用 moc_fild 20,21,22，預設為 true。
+	.OnlyFirstFld = false;	//	true 將傳送到 Fields 的第一層，預設為 false。
+	.OnlyFirstDun = false;	//	true 將傳送到 Dungeons 的第一層，預設為 false。
 }
+
 
 // --------------------------------------------------
 //	Duplicates:

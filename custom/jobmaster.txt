@@ -1,134 +1,117 @@
-//===== rAthena Script =======================================
-//= Job Master
-//===== Description: =========================================
-//= A fully functional job changer.
-//===== Additional Comments: =================================
-//= 1.0 Initial script. [Euphy]
-//= 1.1 Fixed reset on Baby job change.
-//= 1.2 Added Expanded Super Novice support and initial Kagerou/Oboro support.
-//= 1.3 Kagerou/Oboro added.
-//= 1.4 Rebellion added.
-//= 1.5 Added option to disable RebirthClass. [mazvi]
-//= 1.6 Added option to get job related equipment on change. [Braniff]
-//= 1.7 Readability changes. Also added BabyExpanded and BabySummoner classes. [Jey]
-//= 1.8 Added option to disable Baby Novice Only but Baby Class can be Enabled [mazvi]
-//= 1.9 Migrate/Integrate to Global Functions Platinum Skills. [mazvi]
-//= 2.0 Added 4th class [Lemongrass]
-//============================================================
-
-prontera,146,93,6	script	Job Master	10006,{
+prontera,146,93,6	script	職業大師	10006,{
 function Get_Job_Equip;
-// Checks if the Player has the required level.
-// closes if not, returns if yes
+// 檢查玩家是否達到所需等級。
+// 如果未達到則關閉，達到則返回
 function	Require_Level	{
 	if (BaseLevel < getarg(0) || JobLevel < getarg(1)) {
 		.@blvl = getarg(0) - BaseLevel;
 		.@jlvl = getarg(1) - JobLevel;
-		mes "Level requirement:";
+		mes "等級要求:";
 		mes ((getarg(0)>1)? 
-			"^bb0000"+getarg(0)+"^000000 (^bb0000Base^000000) / ":"")+"^00bb00"+
-			getarg(1)+"^000000 (^00bb00Job^000000)";
-		mes "You need " +
-			((.@blvl > 0) ? "^bb0000"+.@blvl+"^000000 more base levels " + 
-				((.@jlvl > 0) ? "and " : "") : "") +
-			((.@jlvl > 0) ? "^00bb00"+.@jlvl+"^000000 more job levels " : "") +
-			"to continue.";
+			"^bb0000"+getarg(0)+"^000000 (^bb0000基礎^000000) / ":"")+"^00bb00"+
+			getarg(1)+"^000000 (^00bb00職業^000000)";
+		mes "你需要 " +
+			((.@blvl > 0) ? "^bb0000"+.@blvl+"^000000 基礎等級 " + 
+				((.@jlvl > 0) ? "和 " : "") : "") +
+			((.@jlvl > 0) ? "^00bb00"+.@jlvl+"^000000 職業等級 " : "") +
+			"才能繼續。";
 		close;
 	}
 	return;
 }
 
-// Checks if the given eac is a baby class
+// 檢查給定的eac是否為嬰兒職業
 function Is_Baby	{
 	return ((getarg(0, eaclass())&EAJL_BABY)>0);
 }
 
-// Checks if the player can change to fourth class.
-// Note: This does not include the level checks.
+// 檢查玩家是否可以轉換到第四職業。
+// 注意：這不包括等級檢查。
 function	Can_Change_Fourth	{
-	// To change to fourth class you need to be:
-	// * Transcendent Third Class
+	// 轉換到第四職業需要：
+	// * 超越第三職業
 	if( !.FourthClass )
-		return false; // Fourth job change disabled
+		return false; // 第四職業轉換禁用
 	if( (eaclass()&(EAJL_THIRD|EAJL_UPPER)) != (EAJL_THIRD|EAJL_UPPER) )
-		return false; // Not Transcendent Third Class
+		return false; // 不是超越的第三職業
 	if( eaclass()&EAJL_FOURTH )
-		return false; // Already Fourth Class
+		return false; // 已經是第四職業
 	if( roclass(eaclass()|EAJL_FOURTH) < 0 )
-		return false; // Job has no Fourth Class
+		return false; // 職業沒有第四職業
 	return true;
 }
 
-// Checks if the player can change to third class.
-// Note: This does not include the level checks.
+// 檢查玩家是否可以轉換到第三職業。
+// 注意：這不包括等級檢查。
 function	Can_Change_Third	{
-	// To change to third class you either need to be:
-	// * Second Class
-	// * Transcendent Second Class
-	// * Baby Second Class
+	// 轉換到第三職業需要：
+	// * 第二職業
+	// * 超越的第二職業
+	// * 嬰兒第二職業
 	if( !.ThirdClass )
-		return false; // Third job change disabled
+		return false; // 第三職業轉換禁用
 	if( !(eaclass()&EAJL_2) )
-		return false; // Not second Class
+		return false; // 不是第二職業
 	if( eaclass()&EAJL_THIRD )
-		return false; // Already Third Class
+		return false; // 已經是第三職業
 	if( roclass(eaclass()|EAJL_THIRD) < 0 )
-		return false; // Job has no third Class
+		return false; // 職業沒有第三職業
 	if( (eaclass()&EAJ_UPPERMASK) == EAJ_SUPER_NOVICE )
-		return false; // Exp. Super Novice equals 3rd Cls, but has it's own case
+		return false; // 經驗超級新手等於第三職業，但有自己特殊情況
 	if( Is_Baby() && (!.BabyClass || !.BabyThird) )
-		return false; // No Baby (Third) change allowed
+		return false; // 不允許嬰兒（第三）轉換
 	return true;
 }
 
+// 檢查玩家是否可以重生
 function	Can_Rebirth	{
-	// To rebirth, you need to be:
-	// * Second Class
+	// 要重生，你需要：
+	// * 第二職業
 	if( !.RebirthClass )
-		return false; // Rebirth disabled
+		return false; // 重生禁用
 	if( !(eaclass()&EAJL_2) )
-		return false; // Not second Class
+		return false; // 不是第二職業
 	if( eaclass()&(EAJL_UPPER|EAJL_THIRD) )
-		return false; // Already Rebirthed/ Third Class
+		return false; // 已經重生/第三職業
 	if( roclass(eaclass()|EAJL_UPPER) < 0 )
-		return false; // Job has no transcended class
+		return false; // 職業沒有超越職業
 	if( Is_Baby() && !.BabyClass )
-		return false; // No Baby changes allowed
+		return false; // 不允許嬰兒轉換
 	return true;
 }
 
-// Checks if the given eac is a first class
+// 檢查給定的eac是否為第一職業
 function	Is_First_Cls	{
 	return (getarg(0) <= EAJ_TAEKWON);
 }
 
 function	Check_Riding	{
-	// Note: Why we should always check for Riding:
-	// Mounts are considered as another class, which
-	// would make this NPC bigger just to handle with
-	// those special cases.
+	// 注意：為什麼我們應該始終檢查騎乘：
+	// 坐騎被視為另一個職業，這會使這個NPC變得更大來處理
+	// 這些特殊情況。
 	if (checkfalcon() || checkcart() || checkriding() || ismounting()) {
-		mes "Please remove your " +
-			((checkfalcon()) ? "falcon" : "") +
-			((checkcart()) ? "cart" : "") +
+		mes "請在繼續之前移除你的 " +
+			((checkfalcon()) ? "獵鷹" : "") +
+			((checkcart()) ? "手推車" : "") +
 			((checkriding()) ? "Peco" : "") +
-			((ismounting()) ? "mount" : "") +
-			" before proceeding.";
-		close;
-	}
-	return;
-}
-function	Check_SkillPoints	{
-	if (.SkillPointCheck && SkillPoint) {
-		mes "Please use all your skill points before proceeding.";
+			((ismounting()) ? "坐騎" : "") +
+			"。";
 		close;
 	}
 	return;
 }
 
-// addJobOptions is essentially the same like
-// setarray .@array[getarraysize(.@array)],opt1,opt2,...;
-// It's just easier to read, since we're using it very often
+function	Check_SkillPoints	{
+	if (.SkillPointCheck && SkillPoint) {
+		mes "請在繼續之前使用完所有技能點。";
+		close;
+	}
+	return;
+}
+
+// addJobOptions 基本上與
+// setarray .@array[getarraysize(.@array)],opt1,opt2,...; 相同；
+// 只是一個更易於閱讀的方式，因為我們經常使用它
 function	Job_Options	{
 	.@argcount = getargcount();
 	.@arr_size = getarraysize(getarg(0));
@@ -137,82 +120,78 @@ function	Job_Options	{
 	}
 }
 
-// Begin of the NPC
+// NPC的開始
 	mes .NPCName$;
 	Check_Riding();
 	Check_SkillPoints();
 
-	// initialisation
+	// 初始化
 	.@eac = eaclass();
 	.@fourth_possible = Can_Change_Fourth();
 	.@third_possible = Can_Change_Third();
 	.@rebirth_possible = Can_Rebirth();
 	.@first_eac = .@eac&EAJ_BASEMASK;
 	.@second_eac = .@eac&EAJ_UPPERMASK;
-	// Note: These are already set in pc.cpp
-	// BaseClass = roclass(.@eac&EAJ_BASEMASK) which is the players First Class
-	// BaseJob = roclass(.@eac&EAJ_UPPERMASK) which is the players Second Class
-	//dispbottom "Debug: eac ("+.@eac+"), third ("+.@third_possible+"), rebirth("+.@rebirth_possible+"), BaseClass ("+BaseClass+"), BaseJob ("+BaseJob+")";
-		
-	// From here on the jobmaster checks the current class
-	// and fills the array `.@job_opt` with possible
-	// job options for the player.
+
+
+	// 從這裡開始職業大師檢查當前類別
+	// 並填充數組 `.@job_opt` 以獲取玩家的可能職業選項。
 	
 	if( .@rebirth_possible ) {
-		// Rebirth option (displayed on the top of the menu)
+		// 重生選項（顯示在菜單的頂部）
 		Require_Level(.Req_Rebirth[0], .Req_Rebirth[1]);
 		Job_Options(.@job_opt, Job_Novice_High);
 	}
 	if( .@third_possible ) {
-		// Third Job change (displayed below rebirth)
+		// 第三職業轉換（顯示在重生下方）
 		Require_Level(.Req_Third[0], .Req_Third[1]);
 		Job_Options(.@job_opt, roclass(.@eac|EAJL_THIRD));
 	}
 	if( .@fourth_possible ) {
-		// Fourth Job change (displayed below rebirth)
+		// 第四職業轉換（顯示在重生下方）
 		Require_Level(.Req_Fourth[0], .Req_Fourth[1]);
 		Job_Options(.@job_opt, roclass(.@eac|EAJL_FOURTH));
 	}
 	 
 	if (.SecondExpanded && 
-	   (.@eac&EAJ_UPPERMASK) == EAJ_SUPER_NOVICE && // is Super Novice
-	   !(eaclass()&EAJL_THIRD) ) {				 	// not already Expanded SN
-		// (Baby) Super Novice to Expanded (Baby) Super Novice
+	   (.@eac&EAJ_UPPERMASK) == EAJ_SUPER_NOVICE && // 是超級新手
+	   !(eaclass()&EAJL_THIRD) ) {				 	// 還沒擴展超新手
+		// (嬰兒) 超級新手轉換為 擴展（嬰兒）超級新手
 	   	if( !Is_Baby(.@eac) || (.BabyClass && .BabyExpanded) ) {
-			// .BabyClass & .BabyExpanded must be enabled if the is a baby
+			// .BabyClass & .BabyExpanded 必須啟用
 			Require_Level(.Req_Exp_SNOVI[0], .Req_Exp_SNOVI[1]);
-			Job_Options(.@job_opt,roclass(.@eac|EAJL_THIRD)); // Expanded SN is "third" cls
+			Job_Options(.@job_opt, roclass(.@eac|EAJL_THIRD)); // 擴展SN 是 "第三" 職業
 		}
 	}
 	
 	if (.SecondExpanded && 
-		((.@eac&(~EAJL_BABY)) == EAJ_NINJA || 		// is (Baby) Ninja
-		(.@eac&(~EAJL_BABY)) == EAJ_GUNSLINGER)) {	// is (Baby) Gunslinger
-		// (Baby) Ninja to (Baby) Kagerou / Oboro
-		// (Baby) Gunslinger to (Baby) Rebellion
+		((.@eac&(~EAJL_BABY)) == EAJ_NINJA || 		// 是 (嬰兒) 忍者
+		(.@eac&(~EAJL_BABY)) == EAJ_GUNSLINGER)) {	// 是 (嬰兒) 槍手
+		// (嬰兒) 忍者轉換為 (嬰兒) Kagerou / Ob
+		// （寶寶）槍手轉職為（寶寶）叛變者
 		if( !Is_Baby(.@eac) || (.BabyClass && .BabyExpanded) ) {
-			// .BabyClass & .BabyExpanded must be enabled if the is a baby
+			// 如果是寶寶，必須啟用.BabyClass 和 .BabyExpanded
 			Require_Level(.Req_Exp_NJ_GS[0], .Req_Exp_NJ_GS[1]);
-			// Kagerou, Oboro, Rebellion are considered as a 2-1 class
+			// Kagerou、Oboro、Rebellion被視為二轉職業
 			Job_Options(.@job_opt, roclass(.@eac|EAJL_2_1));
 		}
 	}
 	
-	// Player is Job_Novice, Job_Novice_High or Job_Baby
+	// 玩家是 Job_Novice、Job_Novice_High 或 Job_Baby
 	if (.@first_eac == EAJ_NOVICE && .@second_eac != EAJ_SUPER_NOVICE) {
-		// MAPID_NOVICE, MAPID_SUPER_NOVICE, MAPID_NOVICE_HIGH, MAPID_BABY
+		// MAPID_NOVICE、MAPID_SUPER_NOVICE、MAPID_NOVICE_HIGH、MAPID_BABY
 		Require_Level(.Req_First[0], .Req_First[1]);
 		switch(Class) {
 			case Job_Novice:
-				// First job change
-				Job_Options(.@job_opt,Job_Swordman,
+				// 第一次轉職
+				Job_Options(.@job_opt, Job_Swordman,
 					Job_Mage, Job_Archer, Job_Acolyte, Job_Merchant, Job_Thief,
 					Job_Super_Novice, Job_Taekwon, Job_Gunslinger, Job_Ninja);
 				if( .BabyNovice )
 					Job_Options(.@job_opt, Job_Baby);
 				break;
 			case Job_Novice_High:
-				// Job change after rebirth
+				// 轉職後的重生
 				if( .LastJob && lastJob )
 					Job_Options(.@job_opt,
 						roclass((eaclass(lastJob)&EAJ_BASEMASK)|EAJL_UPPER));
@@ -224,9 +203,9 @@ function	Job_Options	{
 			case Job_Baby:
 				if( !.BabyClass )
 					break;
-				// First job change as a baby
+				// 寶寶的第一次轉職
 				Job_Options(.@job_opt, Job_Baby_Swordman, Job_Baby_Mage,
-					Job_Baby_Archer,Job_Baby_Acolyte, Job_Baby_Merchant,
+					Job_Baby_Archer, Job_Baby_Acolyte, Job_Baby_Merchant,
 					Job_Baby_Thief);
 				if( .BabyExpanded )
 					Job_Options(.@job_opt, Job_Super_Baby, Job_Baby_Taekwon,
@@ -235,23 +214,23 @@ function	Job_Options	{
 					Job_Options(.@job_opt, Job_Baby_Summoner);
 				break;
 			default:
-				mes "An error has occurred.";
+				mes "發生錯誤。";
 				close;
 		}
-	} else if( Is_First_Cls(.@eac) || 				// First Class
-			   Is_First_Cls(.@eac&(~EAJL_UPPER)) ||	// Trans. First Cls
-			   (.BabyClass && Is_First_Cls(.@eac&(~EAJL_BABY))) ) {	// Baby First Cls
-		// Player is First Class (not Novice)
-		// most jobs should have two options here  (2-1 and 2-2)
+	} else if( Is_First_Cls(.@eac) ||                // 第一職業
+			   Is_First_Cls(.@eac&(~EAJL_UPPER)) ||  // 轉職第一職業
+			   (.BabyClass && Is_First_Cls(.@eac&(~EAJL_BABY))) ) {   // 寶寶第一職業
+		// 玩家是第一職業（不是初學者）
+		// 大多數職業應該在這裡有兩個選項（2-1 和 2-2）
 		.@class1 = roclass(.@eac|EAJL_2_1); // 2-1
 		.@class2 = roclass(.@eac|EAJL_2_2); // 2-2
-		// dispbottom "Debug: Classes: class1 ("+.@class1+"), class2 ("+.@class2+")";
+		// dispbottom "Debug: 職業: class1 ("+.@class1+"), class2 ("+.@class2+")";
 		if(.LastJob && lastJob && (.@eac&EAJL_UPPER)) {
-			// Player is rebirth Cls and linear class changes are enforced
+			// 玩家是重生職業，並強制進行線性職業改變
 			Require_Level(.Req_Second[0], .Req_Second[1]);
 			Job_Options(.@job_opt, lastJob + Job_Novice_High);
 		} else {
-			// Class is not enforced, player can decide.
+			// 職業不受強制，玩家可以選擇。
 			if( .@class1 > 0 ) { // 2-1
 				Require_Level(.Req_Second[0], .Req_Second[1]);
 				Job_Options(.@job_opt, .@class1);
@@ -263,37 +242,37 @@ function	Job_Options	{
 		}
 	}
 	
-	// Displaying the Job Menu defined by .@job_opt.
-	// .@job_opt should not be changed below this line.
+	// 顯示由 .@job_opt 定義的職業選單。
+	// .@job_opt 不應該在此行以下更改。
 	function Job_Menu;
 	Job_Menu(.@job_opt);
 	close;
 
-// Displays the job menu
-function	Job_Menu	{
-	// getarg(0) is the .@job_opt array holding all available job changes.
+// 顯示職業選單
+function    Job_Menu    {
+	// getarg(0) 是持有所有可用職業變更的 .@job_opt 陣列。
 	function Confirm_Change;
 	while(true) {
 		.@opt_cnt =  getarraysize(getarg(0));
 		if( .@opt_cnt <= 0 ) {
-			mes "No more jobs are available.";
+			mes "沒有更多的職業可用。";
 			close;
 		}
 
-		.@selected = 0; // Just a single job class given, no select needed
+		.@selected = 0; // 只有單一職業類別給出，無需選擇
 		if (.@opt_cnt > 1) {
-			// Multiple job classes given. Select one and save it to .@class
-			// After that confirm .@class
-			mes "Select a job.";
+			// 給出多個職業類別。選擇一個並將其保存到 .@class
+			// 然後確認 .@class
+			mes "選擇一個職業。";
 			.@menu$ = "";
 			for (.@i = 0; .@i < .@opt_cnt; .@i++) {
 				if( getelementofarray(getarg(0), .@i) == Job_Novice_High)
-					.@jobname$ = "^0055FFRebirth^000000";
+					.@jobname$ = "^0055FF重生^000000";
 				else
 					.@jobname$ = jobname(getelementofarray(getarg(0), .@i));
 				.@menu$ = .@menu$ + " ~ " + .@jobname$ + ":";
 			}
-			.@menu$ = .@menu$+" ~ ^777777Cancel^000000";
+			.@menu$ = .@menu$+" ~ ^777777取消^000000";
 			.@selected = select(.@menu$) - 1;
 			if( .@selected < 0 || .@selected >= .@opt_cnt )
 				close;
@@ -303,15 +282,13 @@ function	Job_Menu	{
 		.@class = getelementofarray(getarg(0), .@selected);
 		if ((.@class == Job_Super_Novice || .@class == Job_Super_Baby) &&
 				BaseLevel < .SNovice) {
-			// Special Level Requirement because Super Novice and
-			// Super Baby can both be selected in one of the first class
-			// changes. That's why the Level Requirement is after and not before
-			// the selection.
-			mes "A base level of " + .SNovice +
-				" is required to turn into a " + jobname(.@class) + ".";
+			// 特殊等級要求，因為超級初學者和
+			// 超級寶寶都可以在其中一個第一職業
+			// 變更中選擇。因此等級要求在選擇之後，而不是之前。
+			mes "轉變為 " + jobname(.@class) + " 需要基礎等級 " + .SNovice + "。";
 			return;
 		}
-		// Confirm the Class
+		// 確認職業
 		Confirm_Change(.@class, .@opt_cnt > 1);
 		next;
 		mes .NPCName$;
@@ -319,202 +296,201 @@ function	Job_Menu	{
 	return;
 }
 
-
-// Executes the actual jobchange and closes.
-function	Job_Change	{
-	.@previous_class = Class;
-	.@to_cls = getarg(0);
-	next;
-	mes .NPCName$;
-	mes "You are now " + callfunc("F_InsertArticle", jobname(.@to_cls)) + "!";
-	if (.@to_cls == Job_Novice_High && .LastJob)
-		lastJob = Class; // Saves the lastJob for rebirth
-	jobchange .@to_cls;
-	if (.@to_cls == Job_Novice_High)
-		resetlvl(1);
-	else if (.@to_cls == Job_Baby) {
-		resetstatus;
-		resetskill;
-		set SkillPoint,0;
+// 執行實際的職業變更並關閉。
+function Job_Change {
+	.@previous_class = Class; // 保存當前職業
+	.@to_cls = getarg(0); // 獲取要變更到的職業
+	next; // 繼續下一步
+	mes .NPCName$; // 顯示NPC的名稱
+	mes "您現在是 " + callfunc("F_InsertArticle", jobname(.@to_cls)) + "!"; // 顯示變更職業的訊息
+	if (.@to_cls == Job_Novice_High && .LastJob) // 如果變更到高級新手職業且存在LastJob
+		lastJob = Class; // 保存最後的職業以便重生
+	jobchange .@to_cls; // 變更職業
+	if (.@to_cls == Job_Novice_High) // 如果職業是高級新手
+		resetlvl(1); // 重置等級為1
+	else if (.@to_cls == Job_Baby) { // 如果職業是寶寶
+		resetstatus; // 重置狀態
+		resetskill; // 重置技能
+		set SkillPoint,0; // 設置技能點為0
 	}
-	specialeffect2 EF_ANGEL2;
-	specialeffect2 EF_ELECTRIC;
-	if (.@previous_class != Class) {
-		if (.Platinum)
-			callfunc "F_GetPlatinumSkills";
-		if (.GetJobEquip)
-			Get_Job_Equip();
+	specialeffect2 EF_ANGEL2; // 显示天使效果
+	specialeffect2 EF_ELECTRIC; // 显示電效果
+	if (.@previous_class != Class) { // 如果職業變更成功
+		if (.Platinum) // 如果擁有柏金
+			callfunc "F_GetPlatinumSkills"; // 獲取柏金技能
+		if (.GetJobEquip) // 如果需要獲取職業裝備
+			Get_Job_Equip(); // 獲取職業裝備
 	}
-	close; // Always closes after the change
+	close; // 變更後始終關閉
 }
 
-function	Confirm_Change	{
-	// Player confirms he want to change into .@class
-	.@class = getarg(0, -1);
-	.@back = getarg(1, false);
-	if( .@class < 0 || eaclass(.@class) == -1 ) {
-		mes "Unknown Class Error.";
-		close;
+function Confirm_Change {
+	// 玩家確認是否要變更為 .@class 職業
+	.@class = getarg(0, -1); // 獲取要變更的職業
+	.@back = getarg(1, false); // 獲取是否返回的選項
+	if( .@class < 0 || eaclass(.@class) == -1 ) { // 如果職業無效
+		mes "未知職業錯誤。"; // 顯示錯誤訊息
+		close; // 關閉
 	}
-	mes "Do you want to change into ^0055FF"+jobname(.@class)+"^000000 class?";
-	.@job_option$ = " ~ Change into ^0055FF"+jobname(.@class)+"^000000 class";
-	if( .@class == Job_Novice_High)
-		.@job_option$ = " ~ ^0055FFRebirth^000000";
+	mes "您想要變更為 ^0055FF"+jobname(.@class)+"^000000 職業嗎？"; // 顯示確認訊息
+	.@job_option$ = " ~ 變更為 ^0055FF"+jobname(.@class)+"^000000 職業"; // 變更職業的選項
+	if( .@class == Job_Novice_High) // 如果職業是高級新手
+		.@job_option$ = " ~ ^0055FF重生^000000"; // 將選項改為重生
 	
 	if (select(.@job_option$+": ~ ^777777" + 
-			((.@back) ?"Go back" : "Cancel") + "^000000") == 1) {
-		Job_Change(.@class);
+			((.@back) ?"返回" : "取消") + "^000000") == 1) { // 如果玩家選擇變更
+		Job_Change(.@class); // 調用變更職業的函數
 	}
-	if (!.@back)
-		close; // "Cancel" pressed
-	return;
+	if (!.@back) // 如果選擇了"取消"
+		close; // 關閉
+	return; // 返回
 }
 
-// Function which gives a job related item to the player
-// the items are the rewards from the original job change quests
+
+// 函數：給玩家發放與職業相關的物品
+// 這些物品是原始職業變更任務的獎勵
 function	Get_Job_Equip	{
-	// Note: The item is dropping, when the player can't hold it.
-	// But that's better than not giving the item at all.
-	.@eac = eaclass();
+	// 注意：當玩家無法攜帶物品時將掉落該物品。
+	// 不過這總比完全不給物品要好。
+	.@eac = eaclass(); // 獲取玩家的職業類別
 	if( .@eac&EAJL_FOURTH ) {
-		// Fourth Class Items
-		getitem 490087,1; // Hourglass Necklace
+		// 第四類職業物品
+		getitem 490087,1; // 沙漏項鍊
 	} else if( .@eac&EAJL_THIRD ) {
-		// Third Class Items
-		getitem 2795,1;	//	Green Apple Ring for every 3rd Class
+		// 第三類職業物品
+		getitem 2795,1;	//	第三類的綠色蘋果戒指
 		switch(BaseJob) {
-			// BaseJob of Third Cls
-			// For Normal Third, Baby Third and Transcended Third Cls
+			// 第三類的基本職業
+			// 普通第三類、嬰兒第三類和超越第三類
 			case Job_Knight:
-				getitem 5746,1;	break;	//	Rune Circlet [1]
+				getitem 5746,1;	break;	// 符文頭環 [1]
 			case Job_Wizard:
-				getitem 5753,1;	break;	//	Magic Stone Hat [1]
+				getitem 5753,1;	break;	// 魔法石帽子 [1]
 			case Job_Hunter:
-				getitem 5748,1;	break;	//	Sniper Goggle [1]
+				getitem 5748,1;	break;	// 狙擊手護目鏡 [1]
 			case Job_Priest:
-				getitem 5747,1;	break;	//	Mitra [1]
+				getitem 5747,1;	break;	// 魅力帽 [1]
 			case Job_Blacksmith:
-				getitem 5749,1;	break;	//	Driver Band [1]
+				getitem 5749,1;	break;	// 駕駛者之環 [1]
 			case Job_Assassin:
-				getitem 5755,1;	break;	//	Silent Executor [1]
+				getitem 5755,1;	break;	// 靜默執行者 [1]
 			case Job_Crusader:
-				getitem 5757,1;	break;	//	Dip Schmidt Helm [1]
+				getitem 5757,1;	break;	// 迪普施密特頭盔 [1]
 			case Job_Sage:
-				getitem 5756,1;	break;	//	Wind Whisper [1]
+				getitem 5756,1;	break;	// 風之低語 [1]
 			case Job_Bard:
-				getitem 5751,1;	break;	//	Maestro Song's Hat [1]
+				getitem 5751,1;	break;	// 大師歌曲帽 [1]
 			case Job_Dancer:
-				getitem 5758,1;	break;	//	Dying Swan [1]
+				getitem 5758,1;	break;	// 垂死天鵝 [1]
 			case Job_Monk:
-				getitem 5754,1;	break;	//	Blazing Soul [1]
+				getitem 5754,1;	break;	// 燃燒之魂 [1]
 			case Job_Alchemist:
-				getitem 5752,1;	break;	//	Midas Whisper[1]
+				getitem 5752,1;	break;	// 美狄亞的低語 [1]
 			case Job_Rogue:
-				getitem 5750,1; 		//	Shadow Handicraft [1]
-				getitem 6121,1;			//	Makeover Brush
-				getitem 6122,1;	break;	//	Paint Brush
+				getitem 5750,1; 		// 影手工藝 [1]
+				getitem 6121,1;			// 改造刷子
+				getitem 6122,1;	break;	// 顏料刷
 		}
 	} else if (.@eac&EAJL_2) {
-		// Second Class (And not Third Class)
+		// 第二類職業（不是第三類）
 		switch(BaseJob) {
-			// Second Class
+			// 第二類職業
 			case Job_Knight:
-				getitem 1163,1;	break;	//	Claymore [0]
+				getitem 1163,1;	break;	// 大劍 [0]
 			case Job_Priest:
-				getitem 1522,1;	break;	//	Stunner [0]
+				getitem 1522,1;	break;	// 震擊器 [0]
 			case Job_Wizard:
-				getitem 1617,1;	break;	//	Survivor's Rod [0]
+				getitem 1617,1;	break;	// 生還者的法杖 [0]
 			case Job_Blacksmith:
-				getitem 1360,1;	break;	//	Two-Handed-Axe [1]
+				getitem 1360,1;	break;	// 雙手斧 [1]
 			case Job_Hunter:
-				getitem 1718,1;	break;	//	Hunter Bow [0]
+				getitem 1718,1;	break;	// 獵人弓 [0]
 			case Job_Assassin:
-				getitem 1254,1;	break;	//	Jamadhar [0]
+				getitem 1254,1;	break;	// 短刀 [0]
 			case Job_Crusader:
-				getitem 1410,1;	break;	//	Lance [0]
+				getitem 1410,1;	break;	// 長槍 [0]
 			case Job_Monk:
-				getitem 1807,1;	break;	//	Fist [0]
+				getitem 1807,1;	break;	// 拳 [0]
 			case Job_Sage:
-				getitem 1550,1;	break;	//	Book [3]
+				getitem 1550,1;	break;	// 書 [3]
 			case Job_Rogue:
-				getitem 1222,1;	break;	//	Damascus [1]
+				getitem 1222,1;	break;	// 大馬士革 [1]
 			case Job_Alchemist:
-				getitem 1126,1;	break;	//	Saber [2]
+				getitem 1126,1;	break;	// 軍刀 [2]
 			case Job_Bard:
-				getitem 1907,1;	break;	//	Guitar [0]
+				getitem 1907,1;	break;	// 吉他 [0]
 			case Job_Dancer:
-				getitem 1960,1;	break;	//	Whip [1]
+				getitem 1960,1;	break;	// 鞭子 [1]
 			case Job_Super_Novice:
-				getitem 1208,1;	break;	//	Main Gauche [4]
+				getitem 1208,1;	break;	// 主手刀 [4]
 			case Job_Star_Gladiator:
-				getitem 1550,1;	break;	//	Book [3]
+				getitem 1550,1;	break;	// 書 [3]
 			case Job_Soul_Linker:
-				getitem 1617,1;	break;	//	Survivor's Rod [0]
+				getitem 1617,1;	break;	// 生還者的法杖 [0]
 		}
 	} else {
-		// Neither Second or Third Cls
-		// => First Cls or not covered by the switch
+		// 既不是第二類也不是第三類
+		// => 第一類或不在開關範圍內
 		switch(BaseClass) {
-			// First Class
+			// 第一類職業
 			case Job_Swordman:
-				getitem 1108,1;	break;	//	Blade [4]
+				getitem 1108,1;	break;	// 刀 [4]
 			case Job_Mage:
-				getitem 1602,1;	break;	//	Rod [4]
+				getitem 1602,1;	break;	// 杖 [4]
 			case Job_Archer:
-				getitem 1705,1;	break;	//	Composite Bow [4]
+				getitem 1705,1;	break;	// 複合弓 [4]
 			case Job_Acolyte:
-				getitem 1505,1;	break;	//	Mace [4]
+				getitem 1505,1;	break;	// 錘 [4]
 			case Job_Merchant:
-				getitem 1302,1;	break;	//	Axe [4]
+				getitem 1302,1;	break;	// 斧 [4]
 			case Job_Thief:
-				getitem 1208,1;	break;	//	Main Gauche [4]
+				getitem 1208,1;	break;	// 主手刀 [4]
 			case Job_Gunslinger:
-				getitem 13101,1; break;	//	Six Shooter [2]
+				getitem 13101,1; break;	// 六發左輪 [2]
 			case Job_Ninja:
-				getitem 13010,1; break;	//	Asura [2]
+				getitem 13010,1; break;	// 阿修羅 [2]
 		}
 	}
-	return;
+	return; // 返回
 }
 
 OnInit:
-	// Initialisation, do not edit these
-	.NPCName$ = "[Job Master]";
+	// 初始化，請勿編輯這些項目
+	.NPCName$ = "[職業大師]";
 	
-	// Settings
-	.FourthClass = true;				// Enable fourth classes?
-	.ThirdClass = true;					// Enable third classes?
-	.RebirthClass = true;				// Enable rebirth classes?
-	.SecondExpanded = true;				// Enable new expanded second classes: Ex. Super Novice, Kagerou/Oboro, Rebellion?
-	.BabyNovice = true;					// Enable Baby novice classes? Disable it if you like player must have parent to get job baby.
-	.BabyClass = true;					// Enable Baby classes?
-	.BabyThird = true;					// Enable Baby third classes?
-	.BabyExpanded = true;				// Enable Baby Expanded classes: Ex. Baby Ninja, Baby Taekwon, etc.
-	.BabySummoner = true;				// Enable Baby Summoner?
-	.LastJob = true;					// Enforce linear class changes?
-	.SkillPointCheck = true;			// Force player to use up all skill points?
-	.Platinum = true;					// Get platinum skills automatically?
-	.GetJobEquip = false;				// Get job equipment (mostly weapons) on job change?
+	// 設定
+	.FourthClass = true;				// 是否啟用第四職業？
+	.ThirdClass = true;					// 是否啟用第三職業？
+	.RebirthClass = true;				// 是否啟用重生職業？
+	.SecondExpanded = true;				// 是否啟用新的擴展第二職業：例如 超級新手、影和忍者、叛逆者？
+	.BabyNovice = true;					// 是否啟用嬰兒新手職業？如果希望玩家必須有父母才能獲得嬰兒職業可以禁用它。
+	.BabyClass = true;					// 是否啟用嬰兒職業？
+	.BabyThird = true;					// 是否啟用嬰兒第三職業？
+	.BabyExpanded = true;				// 是否啟用嬰兒擴展職業：例如 嬰兒忍者、嬰兒跆拳道，等等。
+	.BabySummoner = true;				// 是否啟用嬰兒召喚師？
+	.LastJob = true;					// 強制線性職業變更？
+	.SkillPointCheck = true;			// 強制玩家使用完所有技能點？
+	.Platinum = true;					// 自動獲得白金技能？
+	.GetJobEquip = false;				// 在職業變更時獲得職業裝備（主要是武器）？
 
-	// Level Requirements
-	setarray .Req_First[0],1,10; 		// Minimum base level, job level to turn into 1st class
-	setarray .Req_Second[0],1,40; 		// Minimum base level, job level to turn into 2nd class
-	setarray .Req_Rebirth[0],99,50;		// Minimum base level, job level to rebirth
-	setarray .Req_Third[0],99,50;		// Minimum base level, job level to change to third class
-	setarray .Req_Fourth[0],200,70;		// Minimum base level, job level to change to fourth class
-	setarray .Req_Exp_NJ_GS[0],99,70; 	// Minimum base level, job level to turn into Expanded Ninja and Gunslinger
-	setarray .Req_Exp_SNOVI[0],99,99; 	// Minimum base level, job level to turn into Expanded Super Novice
-	.SNovice = 45;						// Minimum base level to turn into Super Novice
+	// 等級要求
+	setarray .Req_First[0],1,10; 		// 轉為第一職業所需的最低基礎等級、職業等級
+	setarray .Req_Second[0],1,40; 		// 轉為第二職業所需的最低基礎等級、職業等級
+	setarray .Req_Rebirth[0],99,50;		// 重生所需的最低基礎等級、職業等級
+	setarray .Req_Third[0],99,50;		// 轉為第三職業所需的最低基礎等級、職業等級
+	setarray .Req_Fourth[0],200,70;		// 轉為第四職業所需的最低基礎等級、職業等級
+	setarray .Req_Exp_NJ_GS[0],99,70; 	// 轉為擴展忍者和槍手所需的最低基礎等級、職業等級
+	setarray .Req_Exp_SNOVI[0],99,99; 	// 轉為擴展超級新手所需的最低基礎等級、職業等級
+	.SNovice = 45;						// 轉為超級新手的最低基礎等級
 	
-	// Setting adjustments by PACKETVER
+	// 依據 PACKETVER 調整設定
 	if( PACKETVER < 20161207 ) {
 		if( .BabyExpanded )
-			debugmes "jobmaster: BabyExpanded is disabled due to outdated PACKETVER.";
+			debugmes "職業大師: 由於過時的 PACKETVER，嬰兒擴展已禁用。";
 		if( .BabySummoner )
-			debugmes "jobmaster: BabySummoner is disabled due to outdated PACKETVER.";
+			debugmes "職業大師: 由於過時的 PACKETVER，嬰兒召喚師已禁用。";
 		.BabyExpanded = false;
 		.BabySummoner = false;
 	}
 	end;
 }
-

@@ -13,17 +13,17 @@
 //Change "Your Server Name" to your Server Name or whhat ever you desire"
 //============================================================
 
-prontera,164,93,3	script	All in One Shop	564,{
-mes "[All in One Shop]";
-mes "Welcome to ^FF0000Your Server Name^000000 ^000088All in One Shop^000000.";
-mes "Hello there ^FF0000" + strcharinfo(0) + "^000000.";
-mes "We have everything in game offer";
-mes "Please select what you want";
+prontera,164,93,3	script	全能商店	564,{
+mes "[全能商店]";
+mes "歡迎來到 ^FF0000你的伺服器名稱^000000 ^000088全能商店^000000.";
+mes "你好 ^FF0000" + strcharinfo(0) + "^000000.";
+mes "我們在遊戲中提供一切物品";
+mes "請選擇你需要的物品";
 next;
-switch(select("1 Healing Items:2 Usable Items:3 Arrows & Ammos:4 Weapons:5 Shields:6 Body Armors:7 Garment:8 Hats:9 Shoes:10 Accessories:11 Cards & Essense & Enchant:12 Shadow Equipments:13 Costumes:14 Pet Shop:15 Nothing")) {
+switch(select("1 治療物品:2 可用物品:3 箭矢和彈藥:4 武器:5 盾牌:6 體甲:7 外套:8 帽子:9 鞋子:10 配飾:11 卡片和精華與附魔:12 影子裝備:13 服裝:14 寵物商店:15 沒有")) {
 	close2;
-	case 1: //Healing
-		switch(select("Healing Items 1:Healing Items 2")) {
+	case 1: //治療
+		switch(select("治療物品 1:治療物品 2")) {
 			case 1:
 				callshop "Heal1", 0;
 				end;
@@ -31,8 +31,8 @@ switch(select("1 Healing Items:2 Usable Items:3 Arrows & Ammos:4 Weapons:5 Shiel
 				callshop "Heal2", 0;
 				end;
 		}
-	case 2: //Usable
-		switch(select("Usable 1:Usable 2:Usable 3:Usable 4:Usable 5:Usable 6:Usable 7:Usable 8:Delayconsume 1:Delayconsume 2:Delayconsume 3:Delayconsume 4")) {
+	case 2: //可用物品
+		switch(select("可用物品 1:可用物品 2:可用物品 3:可用物品 4:可用物品 5:可用物品 6:可用物品 7:可用物品 8:延遲消耗 1:延遲消耗 2:延遲消耗 3:延遲消耗 4")) {
 			case 1:
 				callshop "Use1", 0;
 				end;
@@ -70,11 +70,11 @@ switch(select("1 Healing Items:2 Usable Items:3 Arrows & Ammos:4 Weapons:5 Shiel
 				callshop "Delay4", 0;
 				end;
 		}
-	case 3: //Arrows & Ammos
+	case 3: //箭矢和彈藥
 		callshop "Arrow", 0;
 		end;
-	case 4: //Weapons
-		switch(select("Knife [1202-28776]:Knife [510001-510139]:Katar:Knuckle:Mace:1HSword:2HSword:1HAxe:2HAxe:1HSpear:2HSpear:1HStaff 1:1HStaff 2:2HStaff:Book:Bow:Musical:Whip:Huuma:Gun [Gatling & GL & Revolver]:Gun [Rifle & Shotgun]")){
+	case 4: //武器
+		switch(select("刀 [1202-28776]:刀 [510001-510139]:匕首:拳套:錘:單手劍:雙手劍:單手斧:雙手斧:單手矛:雙手矛:單手法杖 1:單手法杖 2:雙手法杖:書:弓:樂器:鞭子:胡馬:槍 [來福槍 & GL & 左輪槍]:槍 [步槍 & 霰彈槍]")){
 			case 1:
 				callshop "Knife1", 0;
 				end;
@@ -139,255 +139,257 @@ switch(select("1 Healing Items:2 Usable Items:3 Arrows & Ammos:4 Weapons:5 Shiel
 				callshop "Gun2", 0;
 				end;
 		}
-	case 5: //Shield
-		callshop "Shield", 0;
-		end;
-	case 6: //Body
-		switch(select("Armors [2302-15151]:Armors [15152-450085]:Armors [450086-450271]:")){
-			case 1:
-				callshop "Body1", 0;
-				end;
-			case 2:
-				callshop "Body2", 0;
-				end;
-			case 3:
-				callshop "Body3", 0;
-				end;
-		}
-	case 7: //Robe
-		switch(select("Garment [2502-20841]:Garment [20842-450267]")){
-			case 1:
-				callshop "Robe1", 0;
-				end;
-			case 2:
-				callshop "Robe2", 0;
-				end;
-		}
-	case 8: //Hats
-		switch(select("Top [2206-5229]:Top [5230-5492]:Top [5495-5791]:Top [5792-18693]:Top [18694-19165]:Top [19166-400151]:Mid:Low:Top+Mid+Low:Top+Mid:Top+Low:Mid+Low")){
-			case 1:
-				callshop "Top1", 0;
-				end;
-			case 2:
-				callshop "Top2", 0;
-				end;
-			case 3:
-				callshop "Top3", 0;
-				end;
-			case 4:
-				callshop "Top4", 0;
-				end;
-			case 5:
-				callshop "Top5", 0;
-				end;
-			case 6:
-				callshop "Top6", 0;
-				end;
-			case 7:
-				callshop "Mid", 0;
-				end;
-			case 8:
-				callshop "Low", 0;
-				end;
-			case 9:
-				callshop "TML", 0;
-				end;
-			case 10:
-				callshop "TM", 0;
-				end;
-			case 11:
-				callshop "TL", 0;
-				end;
-			case 12:
-				callshop "ML", 0;
-				end;
-		}
-	case 9: //Shoe
-		switch(select("Shoe [2402-22172]:Shoe [22173-450268]")){
-			case 1:
-				callshop "Shoe1", 0;
-				end;
-			case 2:
-				callshop "Shoe2", 0;
-				end;
-		}
-	case 10: //Acc
-		switch(select("Right Accessories:Left Accessories:Accessories [2610-2804]:Accessories [2805-28342]:Accessories [28352-490162]:Accessories [490165-490301]")){
-			case 1:
-				callshop "AccR", 0;
-				end;
-			case 2:
-				callshop "AccL", 0;
-				end;
-			case 3:
-				callshop "Acc1", 0;
-				end;
-			case 4:
-				callshop "Acc2", 0;
-				end;	
-			case 5:
-				callshop "Acc3", 0;
-				end;
-			case 6:
-				callshop "Acc4", 0;
-				end;
-		}
-	case 11: //Card
-		switch(select("Weapon 1:Weapon 2:Hat:Armor 1:Armor 2:Shield:Garment:Shoe:Both Accessorie:Right Accessorie:Left Accessorie:Essense:Enchant 1:Enchant 2:Enchant 3:Enchant 4:Enchant 5:Enchant 6:Enchant 7:Enchant 8:Enchant 9")){
-			case 1:
-				callshop "Cardweapon1", 0;
-				end;
-			case 2:
-				callshop "Cardweapon2", 0;
-				end;
-			case 3:
-				callshop "Cardtop", 0;
-				end;
-			case 4:
-				callshop "Cardbody1", 0;
-				end;
-			case 5:
-				callshop "Cardbody2", 0;
-				end;
-			case 6:
-				callshop "Cardshield", 0;
-				end;
-			case 7:
-				callshop "Cardrobe", 0;
-				end;
-			case 8:
-				callshop "Cardshoe", 0;
-				end;
-			case 9:
-				callshop "Cardacc", 0;
-				end;
-			case 10:
-				callshop "CardaccR", 0;
-				end;
-			case 11:
-				callshop "CardaccL", 0;
-				end;
-			case 12:
-				callshop "Essense", 0;
-				end;
-			case 13:
-				callshop "Enchant1", 0;
-				end;
-			case 14:
-				callshop "Enchant2", 0;
-				end;
-			case 15:
-				callshop "Enchant3", 0;
-				end;
-			case 16:
-				callshop "Enchant4", 0;
-				end;
-			case 17:
-				callshop "Enchant5", 0;
-				end;
-			case 18:
-				callshop "Enchant6", 0;
-				end;
-			case 19:
-				callshop "Enchant7", 0;
-				end;
-			case 20:
-				callshop "Enchant8", 0;
-				end;
-			case 21:
-				callshop "Enchant9", 0;
-				end;
-		}
-	case 12: //Shadow
-		switch(select("Shadow Gears 1:Shadow Gears 2:Shadow Gears 3:Shadow Gears 4:Shadow Gears 5:Shadow Gears 6")){
-			case 1:
-				callshop "Shadow1", 0;
-				end;
-			case 2:
-				callshop "Shadow2", 0;
-				end;
-			case 3:
-				callshop "Shadow3", 0;
-				end;
-			case 4:
-				callshop "Shadow4", 0;
-				end;
-			case 5:
-				callshop "Shadow5", 0;
-				end;
-			case 6:
-				callshop "Shadow6", 0;
-				end;
-		}
-	case 13: //Costume
-		switch(select("Top 1:Top 2:Top 3:Top 4:Top 5:Top 6:Mid 1:Mid 2:Low 1:Low 2:Low 3:Top+Mid+Low:Top+Mid:Top+Low:Mid+Low:Garments")){
-			case 1:
-				callshop "Costop1", 0;
-				end;
-			case 2:
-				callshop "Costop2", 0;
-				end;
-			case 3:
-				callshop "Costop3", 0;
-				end;
-			case 4:
-				callshop "Costop4", 0;
-				end;
-			case 5:
-				callshop "Costop5", 0;
-				end;
-			case 6:
-				callshop "Costop6", 0;
-				end;
-			case 7:
-				callshop "Cosmid1", 0;
-				end;
-			case 8:
-				callshop "Cosmid2", 0;
-				end;
-			case 9:
-				callshop "Coslow1", 0;
-				end;
-			case 10:
-				callshop "Coslow2", 0;
-				end;
-			case 11:
-				callshop "Coslow3", 0;
-				end;
-			case 12:
-				callshop "Costml", 0;
-				end;
-			case 13:
-				callshop "Costm", 0;
-				end;
-			case 14:
-				callshop "Costl", 0;
-				end;
-			case 15:
-				callshop "Cosml", 0;
-				end;
-			case 16:
-				callshop "Cosrob", 0;
-				end;
-		}
-	case 14: //Pet Shop
-		switch(select("Pet Eggs:Pet Armors:Pet Foods")){
-			case 1:
-				callshop "PetEgg", 0;
-				end;
-			case 2:
-				callshop "PetEq", 0;
-				end;
-			case 3:
-				callshop "PetFood", 0;
-				end;
-		}
-	case 15:
-		mes "[ Quick Mall ]";
-		mes "Okay, come back when you need me.";
-		close;
+case 5: //盾牌
+	callshop "Shield", 0; // 调用商店“盾牌”
+	end; // 结束
+case 6: //身体
+	switch(select("盔甲 [2302-15151]:盔甲 [15152-450085]:盔甲 [450086-450271]:")){
+		case 1:
+			callshop "Body1", 0; // 调用商店“Body1”
+			end;
+		case 2:
+			callshop "Body2", 0; // 调用商店“Body2”
+			end;
+		case 3:
+			callshop "Body3", 0; // 调用商店“Body3”
+			end;
 	}
-}
+case 7: //外袍
+	switch(select("外披 [2502-20841]:外披 [20842-450267]")){
+		case 1:
+			callshop "Robe1", 0; // 调用商店“Robe1”
+			end;
+		case 2:
+			callshop "Robe2", 0; // 调用商店“Robe2”
+			end;
+	}
+case 8: //帽子
+	switch(select("帽子 [2206-5229]:帽子 [5230-5492]:帽子 [5495-5791]:帽子 [5792-18693]:帽子 [18694-19165]:帽子 [19166-400151]:中帽:低帽:帽子+中帽+低帽:帽子+中帽:帽子+低帽:中帽+低帽")){
+		case 1:
+			callshop "Top1", 0; // 调用商店“Top1”
+			end;
+		case 2:
+			callshop "Top2", 0; // 调用商店“Top2”
+			end;
+		case 3:
+			callshop "Top3", 0; // 调用商店“Top3”
+			end;
+		case 4:
+			callshop "Top4", 0; // 调用商店“Top4”
+			end;
+		case 5:
+			callshop "Top5", 0; // 调用商店“Top5”
+			end;
+		case 6:
+			callshop "Top6", 0; // 调用商店“Top6”
+			end;
+		case 7:
+			callshop "Mid", 0; // 调用商店“中帽”
+			end;
+		case 8:
+			callshop "Low", 0; // 调用商店“低帽”
+			end;
+		case 9:
+			callshop "TML", 0; // 调用商店“帽子+中帽+低帽”
+			end;
+		case 10:
+			callshop "TM", 0; // 调用商店“帽子+中帽”
+			end;
+		case 11:
+			callshop "TL", 0; // 调用商店“帽子+低帽”
+			end;
+		case 12:
+			callshop "ML", 0; // 调用商店“中帽+低帽”
+			end;
+	}
+case 9: //鞋子
+	switch(select("鞋子 [2402-22172]:鞋子 [22173-450268]")){
+		case 1:
+			callshop "Shoe1", 0; // 调用商店“Shoe1”
+			end;
+		case 2:
+			callshop "Shoe2", 0; // 调用商店“Shoe2”
+			end;
+	}
+case 10: //配饰
+	switch(select("右配饰:左配饰:配饰 [2610-2804]:配饰 [2805-28342]:配饰 [28352-490162]:配饰 [490165-490301]")){
+		case 1:
+			callshop "AccR", 0; // 调用商店“AccR”
+			end;
+		case 2:
+			callshop "AccL", 0; // 调用商店“AccL”
+			end;
+		case 3:
+			callshop "Acc1", 0; // 调用商店“Acc1”
+			end;
+		case 4:
+			callshop "Acc2", 0; // 调用商店“Acc2”
+			end;
+		case 5:
+			callshop "Acc3", 0; // 调用商店“Acc3”
+			end;
+		case 6:
+			callshop "Acc4", 0; // 调用商店“Acc4”
+			end;
+	}
+case 11: //卡片
+	switch(select("武器 1:武器 2:帽子:盔甲 1:盔甲 2:盾牌:外袍:鞋子:双配饰:右配饰:左配饰:精华:附魔 1:附魔 2:附魔 3:附魔 4:附魔 5:附魔 6:附魔 7:附魔 8:附魔 9")){
+		case 1:
+			callshop "Cardweapon1", 0; // 调用商店“Cardweapon1”
+			end;
+		case 2:
+			callshop "Cardweapon2", 0; // 调用商店“Cardweapon2”
+			end;
+		case 3:
+			callshop "Cardtop", 0; // 调用商店“Cardtop”
+			end;
+		case 4:
+			callshop "Cardbody1", 0; // 调用商店“Cardbody1”
+			end;
+		case 5:
+			callshop "Cardbody2", 0; // 调用商店“Cardbody2”
+			end;
+		case 6:
+			callshop "Cardshield", 0; // 调用商店“Cardshield”
+			end;
+		case 7:
+			callshop "Cardrobe", 0; // 调用商店“Cardrobe”
+			end;
+		case 8:
+			callshop "Cardshoe", 0; // 调用商店“Cardshoe”
+			end;
+		case 9:
+			callshop "Cardacc", 0; // 调用商店“Cardacc”
+			end;
+		case 10:
+			callshop "CardaccR", 0; // 调用商店“CardaccR”
+			end;
+		case 11:
+			callshop "CardaccL", 0; // 调用商店“CardaccL”
+			end;
+		case 12:
+			callshop "Essense", 0; // 调用商店“Essense”
+			end;
+		case 13:
+			callshop "Enchant1", 0; // 调用商店“Enchant1”
+			end;
+		case 14:
+			callshop "Enchant2", 0; // 调用商店“Enchant2”
+			end;
+		case 15:
+			callshop "Enchant3", 0; // 调用商店“Enchant3”
+			end;
+		case 16:
+			callshop "Enchant4", 0; // 调用商店“Enchant4”
+			end;
+		case 17:
+			callshop "Enchant5", 0; // 调用商店“Enchant5”
+			end;
+		case 18:
+			callshop "Enchant6", 0; // 调用商店“Enchant6”
+			end;
+		case 19:
+			callshop "Enchant7", 0; // 调用商店“Enchant7”
+			end;
+		case 20:
+			callshop "Enchant8", 0; // 调用商店“Enchant8”
+			end;
+		case 21:
+			callshop "Enchant9", 0; // 调用商店“Enchant9”
+			end;
+	}
+
+	case 12: //影子
+			switch(select("影子裝備 1:影子裝備 2:影子裝備 3:影子裝備 4:影子裝備 5:影子裝備 6")){
+				case 1:
+					callshop "Shadow1", 0; // 打開影子裝備 1 的商店
+					end;
+				case 2:
+					callshop "Shadow2", 0; // 打開影子裝備 2 的商店
+					end;
+				case 3:
+					callshop "Shadow3", 0; // 打開影子裝備 3 的商店
+					end;
+				case 4:
+					callshop "Shadow4", 0; // 打開影子裝備 4 的商店
+					end;
+				case 5:
+					callshop "Shadow5", 0; // 打開影子裝備 5 的商店
+					end;
+				case 6:
+					callshop "Shadow6", 0; // 打開影子裝備 6 的商店
+					end;
+			}
+		case 13: //服裝
+			switch(select("上衣 1:上衣 2:上衣 3:上衣 4:上衣 5:上衣 6:中衣 1:中衣 2:下衣 1:下衣 2:下衣 3:上+中+下:上+中:上+下:中+下:外套")){
+				case 1:
+					callshop "Costop1", 0; // 打開上衣 1 的商店
+					end;
+				case 2:
+					callshop "Costop2", 0; // 打開上衣 2 的商店
+					end;
+				case 3:
+					callshop "Costop3", 0; // 打開上衣 3 的商店
+					end;
+				case 4:
+					callshop "Costop4", 0; // 打開上衣 4 的商店
+					end;
+				case 5:
+					callshop "Costop5", 0; // 打開上衣 5 的商店
+					end;
+				case 6:
+					callshop "Costop6", 0; // 打開上衣 6 的商店
+					end;
+				case 7:
+					callshop "Cosmid1", 0; // 打開中衣 1 的商店
+					end;
+				case 8:
+					callshop "Cosmid2", 0; // 打開中衣 2 的商店
+					end;
+				case 9:
+					callshop "Coslow1", 0; // 打開下衣 1 的商店
+					end;
+				case 10:
+					callshop "Coslow2", 0; // 打開下衣 2 的商店
+					end;
+				case 11:
+					callshop "Coslow3", 0; // 打開下衣 3 的商店
+					end;
+				case 12:
+					callshop "Costml", 0; // 打開上+中+下的商店
+					end;
+				case 13:
+					callshop "Costm", 0; // 打開上+中的商店
+					end;
+				case 14:
+					callshop "Costl", 0; // 打開上+下的商店
+					end;
+				case 15:
+					callshop "Cosml", 0; // 打開中+下的商店
+					end;
+				case 16:
+					callshop "Cosrob", 0; // 打開外套商店
+					end;
+			}
+		case 14: //寵物商店
+			switch(select("寵物蛋:寵物盔甲:寵物食物")){
+				case 1:
+					callshop "PetEgg", 0; // 打開寵物蛋的商店
+					end;
+				case 2:
+					callshop "PetEq", 0; // 打開寵物盔甲的商店
+					end;
+				case 3:
+					callshop "PetFood", 0; // 打開寵物食物的商店
+					end;
+			}
+		case 15:
+			mes "[ 快速商城 ]"; // 顯示快速商城的訊息
+			mes "好的，當你需要我的時候再來找我。"; // 顯示告別訊息
+			close; // 關閉對話
+		}
+	}
+	
 //shops
 //use items
 -	shop	Heal1	-,500:9999,501:-1,502:-1,503:-1,504:-1,505:-1,506:-1,507:-1,508:-1,509:-1,510:-1,511:-1,512:-1,513:-1,514:-1,515:-1,516:-1,517:-1,518:-1,519:-1,520:-1,521:-1,522:-1,523:-1,525:-1,526:-1,528:-1,529:-1,530:-1,531:-1,532:-1,533:-1,534:-1,535:-1,536:-1,537:-1,538:-1,539:-1,540:-1,541:-1,542:9999,543:9999,544:9999,545:-1,546:-1,547:-1,548:-1,549:-1,550:9999,551:9999,552:9999,553:9999,554:-1,555:-1,556:9999,557:9999,558:9999,559:9999,560:-1,561:-1,562:-1,563:-1,564:9999,565:-1,566:-1,567:-1,568:-1,570:9999,571:9999,572:-1,573:-1,574:9999,575:9999,576:-1,577:-1,578:-1,579:-1,580:-1,581:-1,582:-1,583:-1,584:-1,586:9999,587:-1,588:-1,589:-1,590:9999,591:9999,592:9999,593:9999,594:9999,595:9999,596:9999,597:9999,598:-1,599:-1,607:-1,608:-1,663:9999,669:-1,680:9999,685:-1,11500:-1,11501:-1,11502:-1,11503:9999,11504:9999,11505:9999,11506:-1,11507:-1,11508:-1,11509:-1,11510:-1,11511:-1,11512:-1,11513:-1,11514:9999,11515:-1,11516:9999,11517:9999,11519:-1,11520:-1,11521:-1,11522:-1,11523:-1,11524:-1,11525:9999,11526:9999,11527:-1,11528:-1,11532:9999,11533:9999,11534:9999,11535:-1,11536:9999,11537:9999,11538:9999,11539:9999,11540:9999,11541:9999,11542:9999,11543:9999,11544:9999,11545:9999,11546:9999,11547:9999,11548:9999,11549:9999,11550:9999,11551:9999,11552:9999,11553:9999,11554:9999,11555:9999,11557:-1,11558:-1,11588:9999,11589:9999,11590:-1,11592:9999,11593:9999,11594:9999,11595:9999,11596:9999,11597:9999,11598:9999,11599:9999,11600:9999,11601:9999,11602:9999,11605:9999,11616:-1,11621:-1,11622:-1,11623:-1,11624:-1,11701:9999,11702:9999,11703:9999,11704:9999,11705:9999,11706:9999,11707:9999,11708:9999,11709:-1,11710:-1,11711:-1,11712:-1,11713:9999,12021:9999,12022:9999,12041:-1,12042:-1,12043:-1,12044:-1,12045:-1,12046:-1,12047:-1

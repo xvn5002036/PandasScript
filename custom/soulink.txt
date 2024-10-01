@@ -1,4 +1,4 @@
-prontera,146,108,5	script	Soullinker Buff	10434,{
+prontera,146,108,5	script	靈魂連結增益	10434,{
 switch ( basejob ) {
  case Job_Alchemist:	set .@spirit, 445; break;
  case Job_Monk:	 set .@spirit, 447; break;

@@ -1,93 +1,92 @@
-prontera,164,119,3	script	VIP System	811,{
-if (getgroupid()<4) {
-goto Prem;
+prontera,164,119,3	script	VIP 系統	811,{
+if (getgroupid()<4) { // 如果玩家的組別 ID 小於 4
+	goto Prem; // 跳轉到 Prem 標記
 }
 
-set .@Timer, vip_status(VIP_STATUS_EXPIRE);
+set .@Timer, vip_status(VIP_STATUS_EXPIRE); // 設定剩餘 VIP 狀態的時間
+
+mes "[ VIP NPC ]"; // 顯示 NPC 對話框
+mes "歡迎 "+strcharinfo(0)+","; // 歡迎玩家
+mes "請選擇菜單。"; 
+mes "^FF0000您的 VIP 狀態將於:^000000"; 
+mes gettimestr("%Y-%m/%d %H:%M:%S",21,vip_status(VIP_STATUS_EXPIRE)); // 顯示 VIP 狀態到期時間
+mes "^FF0000剩餘時間: ^000000" + callfunc("Time2Str",.@Timer); // 顯示剩餘時間
+next; // 下一步
 
 mes "[ VIP NPC ]";
-mes "Welcome "+strcharinfo(0)+",";
-mes "Please choose the menu.";
-mes "^FF0000Your VIP Status will Expire at:^000000";
-mes gettimestr("%Y-%m/%d %H:%M:%S",21,vip_status(VIP_STATUS_EXPIRE));
-mes "^FF0000Time Left: ^000000" + callfunc("Time2Str",.@Timer);
+mes "您可以使用 ^00FF00@autoattack^000000 指令讓您的角色自動攻擊。";
+mes "^FF0000注意:^000000 這是一個簡單的指令。";
+mes "請小心使用。";
 next;
-mes "[ VIP NPC ]";
-mes "You can use ^00FF00@autoattack^000000 command to let your character attack automatically.";
-mes "^FF0000Note.^000000 This is just a dumb command.";
-mes "Use it with caution.";
-next;
-switch(select("Buy items:Get buffs:No, thanks.")) {
-	case 1:
-		mes "Choose items do you wants.";
-		goto item_list;
 
-		item_list:
-		menu "50x World Tour Ticket 50000 zeny",world_tour_ticket,"7 Days Unlimited Flywing 50000 zeny",fly_wing,"3 Days Concentration Potion 30000 zeny",aspd1,"3 Days Awakening Potion 30000 zeny",aspd2,"3 Days Berserk Potion 30000 zeny",aspd3;
+switch(select("購買物品:獲取增益:不，謝謝。")) { // 提供選擇菜單
+	case 1: // 如果選擇購買物品
+		mes "請選擇您想要的物品。";
+		goto item_list; // 跳轉到物品列表
 
-		world_tour_ticket:
-		set .@amount, countitem(25464);
-		if (zeny < 50000) mes "Sorry,Your zeny not enough,";
-		else if (.@amount >= 100) mes "You still have the item.";
-		else{
-		getitem 25464,50;
-		set zeny,zeny-50000;
+		item_list: // 物品列表
+		menu "50x 世界旅行票 50000 zeny",world_tour_ticket,"7 天無限飛行翼 50000 zeny",fly_wing,"3 天集中藥水 30000 zeny",aspd1,"3 天覺醒藥水 30000 zeny",aspd2,"3 天狂暴藥水 30000 zeny",aspd3;
+
+		world_tour_ticket: // 世界旅行票的處理
+		set .@amount, countitem(25464); // 計算玩家擁有的世界旅行票數量
+		if (zeny < 50000) mes "抱歉，您的 zeny 不足，"; // 檢查 zeny 是否足夠
+		else if (.@amount >= 100) mes "您仍然擁有該物品。"; // 檢查是否已擁有物品
+		else {
+			getitem 25464,50; // 給予 50 個世界旅行票
+			set zeny,zeny-50000; // 扣除 50000 zeny
 		}
 		close;
 		
-		fly_wing:
+		fly_wing: // 無限飛行翼的處理
 		set .@amount, countitem(12887);
-		if (zeny < 50000) mes "Sorry,Your zeny not enough,";
-		else if (.@amount >= 1) mes "You still have the item.";
-		else{
-		getitem 17229,1;
-		set zeny,zeny-50000;
+		if (zeny < 50000) mes "抱歉，您的 zeny 不足，";
+		else if (.@amount >= 1) mes "您仍然擁有該物品。";
+		else {
+			getitem 17229,1; // 給予 1 個無限飛行翼
+			set zeny,zeny-50000; // 扣除 50000 zeny
 		}
 		close;
 
-		aspd1:
+		aspd1: // 集中藥水的處理
 		set .@amount, countitem(12884);
-		if (zeny < 30000) mes "Sorry,Your zeny not enough,";
-		else if (.@amount >= 1) mes "You still have the item.";
-		else{
-		getitem 17263,1;
-		set zeny,zeny-30000;
+		if (zeny < 30000) mes "抱歉，您的 zeny 不足，";
+		else if (.@amount >= 1) mes "您仍然擁有該物品。";
+		else {
+			getitem 17263,1; // 給予 1 個集中藥水
+			set zeny,zeny-30000; // 扣除 30000 zeny
 		}
 		close;
 
-		aspd2:
+		aspd2: // 覺醒藥水的處理
 		set .@amount, countitem(12885);
-		if (zeny < 30000) mes "Sorry,Your zeny not enough,";
-		else if (.@amount >= 1) mes "You still have the item.";
-		else{
-		getitem 17264,1;
-		set zeny,zeny-30000;
+		if (zeny < 30000) mes "抱歉，您的 zeny 不足，";
+		else if (.@amount >= 1) mes "您仍然擁有該物品。";
+		else {
+			getitem 17264,1; // 給予 1 個覺醒藥水
+			set zeny,zeny-30000; // 扣除 30000 zeny
 		}
 		close;
 
-		aspd3:
+		aspd3: // 狂暴藥水的處理
 		set .@amount, countitem(12886);
-		if (zeny < 30000) mes "Sorry,Your zeny not enough,";
-		else if (.@amount >= 1) mes "You still have the item.";
-		else{
-		getitem 17265,1;
-		set zeny,zeny-30000;
+		if (zeny < 30000) mes "抱歉，您的 zeny 不足，";
+		else if (.@amount >= 1) mes "您仍然擁有該物品。";
+		else {
+			getitem 17265,1; // 給予 1 個狂暴藥水
+			set zeny,zeny-30000; // 扣除 30000 zeny
 		}
 		close;
 
-	case 2:
+	case 2: // 如果選擇獲取增益
 		mes "[ VIP NPC ]";
-		mes "+10 stats buff";
-//		mes "First Buff ^FF0000STR +8, AGI +6, DEX +4, ATK +32^000000";
-//		mes "Second Buffs ^FF0000INT +8, DEX +6, VIT +4, MATK +40^000000";
+		mes "+10 統計增益"; // 顯示增益選項
 		next;
-//		mes "Third Buffs ^FF0000Dex +8, AGI +6, LUK +4, ATK +24, MATK +24^000000";
-//		mes "Fourth Buffs ^FF0000all stat +6, ATK +24, MATK +24^000000";
-		goto buff;
+		goto buff; // 跳轉到增益選擇
 
-		buff:
-		menu "+10 Buff",First;
-		//,"Second Buffs",Second,"Third Buffs",Third,"Fourth Buffs",Fourth;
+		buff: // 增益選擇
+		menu "+10 增益",First; // 提供 +10 增益的選擇
+		//,"第二增益",Second,"第三增益",Third,"第四增益",Fourth;
+
 
 First:
 percentheal 100,100;
@@ -160,78 +159,84 @@ percentheal 100,100;
 close;
 
 	case 3:
-	mes "See you next time.";
+	mes "下次見。";
+	
 	close;
 	}
 
 Prem:
-set .@day,1000;
-set .@week,5000;
-set .@month,20000;
+set .@day,1000;  // 設定 24 小時所需的點數為 1000
+set .@week,5000; // 設定 1 週所需的點數為 5000
+set .@month,20000; // 設定 1 個月所需的點數為 20000
+
+// 檢查用戶的群組 ID，如果大於 60，則不允許使用此功能
 if (getgroupid()>60) {
-mes "[ VIP NPC ]";
-mes "Sorry,GM staff not allowed to use this feature.";
-close;
+	mes "[ VIP NPC ]"; // 顯示 NPC 名稱
+	mes "抱歉，GM 工作人員不允許使用此功能。"; // 顯示錯誤訊息
+	close; // 關閉對話
 }
 
-mes "[ VIP NPC ]";
-mes "Use cash points to be an VIP.";
-mes "24 hours "+.@day+" cash points";
-mes "1 week "+.@week+" cash points";
-mes "1 month "+.@month+" cash points";
-mes "Your current cashpoints "+#CASHPOINTS+".";
-next;
-mes "[ VIP NPC ]";
-mes "^00FF00VIP^000000 can use ^00FF00@autoattack^000000 command to let your character attack automatically.";
-mes "^FF0000Note.^000000 This is just a dumb command.";
-next;
-switch(select("Register for 24 hours:Register for 1 Week:Register for 1 Month:No, Thanks.")) {
-case 1:
-if (#CASHPOINTS < .@day) {
-mes "[ VIP NPC ]";
-mes "Your cash points not enough,";
-mes ""+.@day+" cash points to use this feature.";
-close;
-}
-set #CASHPOINTS, #CASHPOINTS - .@day;
-atcommand "@vip +24h "+strcharinfo(0)+"";
-mes "[ VIP NPC ]";
-mes "Enjoy your service.";
-dispbottom "Your current cashpoints "+#CASHPOINTS+".";
-close;
+mes "[ VIP NPC ]"; // 顯示 NPC 名稱
+mes "使用點數成為 VIP."; // 提供 VIP 服務的訊息
+mes "24 小時 "+.@day+" 點數"; // 顯示 24 小時所需點數
+mes "1 週 "+.@week+" 點數"; // 顯示 1 週所需點數
+mes "1 個月 "+.@month+" 點數"; // 顯示 1 個月所需點數
+mes "您當前的點數 "+#CASHPOINTS+"."; // 顯示用戶當前的點數
+next; // 下一行
 
-case 2:
-if (#CASHPOINTS < .@week) {
-mes "[ VIP NPC ]";
-mes "Your cash points not enough,";
-mes ""+.@week+" cash points to use this feature.";
-close;
-}
-set #CASHPOINTS, #CASHPOINTS - .@week;
-atcommand "@vip +7d "+strcharinfo(0)+"";
-mes "[ VIP NPC ]";
-mes "Enjoy your service.";
-dispbottom "Your current cashpoints "+#CASHPOINTS+".";
-close;
+mes "[ VIP NPC ]"; // 顯示 NPC 名稱
+mes "^00FF00VIP^000000 可以使用 ^00FF00@autoattack^000000 命令讓您的角色自動攻擊。"; // 提供自動攻擊的提示
+mes "^FF0000注意.^000000 這只是一個簡單的命令。"; // 顯示注意事項
+next; // 下一行
 
-case 3:
-if (#CASHPOINTS < .@month) {
-mes "[ VIP NPC ]";
-mes "Your cash points not enough,";
-mes ""+.@month+" cash points to use this feature.";
-close;
-}
-set #CASHPOINTS, #CASHPOINTS - .@month;
-atcommand "@vip +1m "+strcharinfo(0)+"";
-mes "[ VIP NPC ]";
-mes "Enjoy your service.";
-dispbottom "Your current cashpoints "+#CASHPOINTS+".";
-close;
+// 提供選擇菜單讓用戶選擇註冊的時間
+switch(select("註冊 24 小時:註冊 1 週:註冊 1 個月:不，謝謝。")) {
+case 1: // 24 小時選項
+	if (#CASHPOINTS < .@day) { // 檢查點數是否足夠
+		mes "[ VIP NPC ]";
+		mes "您的點數不足，"; // 顯示不足的提示
+		mes ""+.@day+" 點數來使用此功能。"; // 提供所需的點數
+		close; // 關閉對話
+	}
+	set #CASHPOINTS, #CASHPOINTS - .@day; // 扣除點數
+	atcommand "@vip +24h "+strcharinfo(0)+""; // 執行 VIP 命令
+	mes "[ VIP NPC ]"; 
+	mes "享受您的服務。"; // 顯示成功訊息
+	dispbottom "您當前的點數 "+#CASHPOINTS+"."; // 顯示當前點數
+	close; // 關閉對話
 
-case 4:
-mes "[ VIP NPC ]";
-mes "See You next time.";
-close;
+case 2: // 1 週選項
+	if (#CASHPOINTS < .@week) {
+		mes "[ VIP NPC ]";
+		mes "您的點數不足，";
+		mes ""+.@week+" 點數來使用此功能。";
+		close;
+	}
+	set #CASHPOINTS, #CASHPOINTS - .@week;
+	atcommand "@vip +7d "+strcharinfo(0)+""; 
+	mes "[ VIP NPC ]"; 
+	mes "享受您的服務。"; 
+	dispbottom "您當前的點數 "+#CASHPOINTS+"."; 
+	close;
+
+case 3: // 1 個月選項
+	if (#CASHPOINTS < .@month) {
+		mes "[ VIP NPC ]";
+		mes "您的點數不足，";
+		mes ""+.@month+" 點數來使用此功能。";
+		close;
+	}
+	set #CASHPOINTS, #CASHPOINTS - .@month;
+	atcommand "@vip +1m "+strcharinfo(0)+""; 
+	mes "[ VIP NPC ]"; 
+	mes "享受您的服務。"; 
+	dispbottom "您當前的點數 "+#CASHPOINTS+"."; 
+	close;
+
+case 4: // 不感興趣選項
+	mes "[ VIP NPC ]"; 
+	mes "下次再見。"; // 道別訊息
+	close; // 關閉對話
 }
 
 }
@@ -239,39 +244,39 @@ close;
 // --------------------------------------------------
 //	Duplicates:
 // --------------------------------------------------
-alberta,33,240,4	duplicate(VIP System)	VIP System#alb	811
-aldebaran,146,116,4	duplicate(VIP System)	VIP System#alde	811
-amatsu,205,87,4	duplicate(VIP System)	VIP System#ama	811
-ayothaya,212,172,6	duplicate(VIP System)	VIP System#ayo	811
-comodo,191,161,4	duplicate(VIP System)	VIP System#com	811
-einbech,55,36,6	duplicate(VIP System)	VIP System#einbe	811
-einbroch,72,206,4	duplicate(VIP System)	VIP System#einbr	811
-geffen,127,66,4	duplicate(VIP System)	VIP System#gef	811
-gonryun,162,126,4	duplicate(VIP System)	VIP System#gon	811
-hugel,102,148,4	duplicate(VIP System)	VIP System#hug	811
-izlude,128,152,4	duplicate(VIP System)	VIP System#izl	811	//Pre-RE: (132,120)
-jawaii,248,134,4	duplicate(VIP System)	VIP System#jaw	811
-lighthalzen,154,104,4	duplicate(VIP System)	VIP System#lhz	811
-louyang,205,105,6	duplicate(VIP System)	VIP System#lou	811
-manuk,272,150,6	duplicate(VIP System)	VIP System#man	811
-mid_camp,216,286,4	duplicate(VIP System)	VIP System#mid	811
-morocc,146,89,4	duplicate(VIP System)	VIP System#mor	811
-moscovia,226,195,4	duplicate(VIP System)	VIP System#mos	811
-niflheim,199,180,4	duplicate(VIP System)	VIP System#nif	811
-payon,178,109,4	duplicate(VIP System)	VIP System#pay	811
-rachel,138,122,4	duplicate(VIP System)	VIP System#rac	811
-splendide,198,153,4	duplicate(VIP System)	VIP System#spl	811
-umbala,97,148,3	duplicate(VIP System)	VIP System#umb	811
-veins,211,120,4	duplicate(VIP System)	VIP System#ve	811
-xmas,142,139,6	duplicate(VIP System)	VIP System#xmas	811
-yuno,164,50,4	duplicate(VIP System)	VIP System#yuno	811
-//Welgaia,136,119,5	duplicate(VIP System)	VIP System#base	811
+alberta,33,240,4	duplicate(VIP 系統)	VIP 系統#alb	811
+aldebaran,146,116,4	duplicate(VIP 系統)	VIP 系統#alde	811
+amatsu,205,87,4	duplicate(VIP 系統)	VIP 系統#ama	811
+ayothaya,212,172,6	duplicate(VIP 系統)	VIP 系統#ayo	811
+comodo,191,161,4	duplicate(VIP 系統)	VIP 系統#com	811
+einbech,55,36,6	duplicate(VIP 系統)	VIP 系統#einbe	811
+einbroch,72,206,4	duplicate(VIP 系統)	VIP 系統#einbr	811
+geffen,127,66,4	duplicate(VIP 系統)	VIP 系統#gef	811
+gonryun,162,126,4	duplicate(VIP 系統)	VIP 系統#gon	811
+hugel,102,148,4	duplicate(VIP 系統)	VIP 系統#hug	811
+izlude,128,152,4	duplicate(VIP 系統)	VIP 系統#izl	811	//Pre-RE: (132,120)
+jawaii,248,134,4	duplicate(VIP 系統)	VIP 系統#jaw	811
+lighthalzen,154,104,4	duplicate(VIP 系統)	VIP 系統#lhz	811
+louyang,205,105,6	duplicate(VIP 系統)	VIP 系統#lou	811
+manuk,272,150,6	duplicate(VIP 系統)	VIP 系統#man	811
+mid_camp,216,286,4	duplicate(VIP 系統)	VIP 系統#mid	811
+morocc,146,89,4	duplicate(VIP 系統)	VIP 系統#mor	811
+moscovia,226,195,4	duplicate(VIP 系統)	VIP 系統#mos	811
+niflheim,199,180,4	duplicate(VIP 系統)	VIP 系統#nif	811
+payon,178,109,4	duplicate(VIP 系統)	VIP 系統#pay	811
+rachel,138,122,4	duplicate(VIP 系統)	VIP 系統#rac	811
+splendide,198,153,4	duplicate(VIP 系統)	VIP 系統#spl	811
+umbala,97,148,3	duplicate(VIP 系統)	VIP 系統#umb	811
+veins,211,120,4	duplicate(VIP 系統)	VIP 系統#ve	811
+xmas,142,139,6	duplicate(VIP 系統)	VIP 系統#xmas	811
+yuno,164,50,4	duplicate(VIP 系統)	VIP 系統#yuno	811
+//Welgaia,136,119,5	duplicate(VIP 系統)	VIP 系統#base	811
 
 // --------------------------------------------------
 //	Duplicates (Renewal):
 // --------------------------------------------------
-brasilis,199,225,4	duplicate(VIP System)	VIP System#bra	811
-dewata,202,190,6	duplicate(VIP System)	VIP System#dew	811
-dicastes01,196,197,6	duplicate(VIP System)	VIP System#dic	811
-malangdo,137,116,6	duplicate(VIP System)	VIP System#mal	811
-malaya,228,195,4	duplicate(VIP System)	VIP System#ma	811
+brasilis,199,225,4	duplicate(VIP 系統)	VIP 系統#bra	811
+dewata,202,190,6	duplicate(VIP 系統)	VIP 系統#dew	811
+dicastes01,196,197,6	duplicate(VIP 系統)	VIP 系統#dic	811
+malangdo,137,116,6	duplicate(VIP 系統)	VIP 系統#mal	811
+malaya,228,195,4	duplicate(VIP 系統)	VIP 系統#ma	811

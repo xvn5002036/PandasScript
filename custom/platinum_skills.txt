@@ -17,18 +17,21 @@
 //= 3.0 Migrate/Integrate to Global Functions. [mazvi]
 //============================================================
 
-prontera,146,98,5	script	Platinum Skill NPC	3630,{
-	mes "[Platinum Skill NPC]";
-	mes "I can give you the special skills available to your job.";
-	mes "Would you like these skills now?";
-	next;
-	if (select("Yes Please:No") == 2) {
-		mes "[Platinum Skill NPC]";
-		mes "Have a nice day... >.>";
-		close;
+prontera,146,98,5	script	白金技能 NPC	3630,{
+	mes "[白金技能 NPC]";  // 顯示 NPC 的對話框
+	mes "我可以給你根據你的職業可用的特殊技能。";  // 提供技能的說明
+	mes "你現在想要這些技能嗎？";  // 詢問玩家是否希望獲得技能
+	next;  // 等待玩家的回應
+	
+	if (select("是的，請給我:不") == 2) {  // 玩家選擇“否”
+		mes "[白金技能 NPC]";  // 再次顯示 NPC 的對話框
+		mes "祝你有美好的一天... >.>";  // NPC 給予祝福
+		close;  // 關閉對話框
 	}
-	callfunc "F_GetPlatinumSkills";
-	mes "[Platinum Skill NPC]";
-	mes "There you go!";
-	close;
+	
+	callfunc "F_GetPlatinumSkills";  // 呼叫函數以獲取特殊技能
+	mes "[白金技能 NPC]";  // 再次顯示 NPC 的對話框
+	mes "這裡是你的技能！";  // 通知玩家技能已經授予
+	close;  // 關閉對話框
 }
+

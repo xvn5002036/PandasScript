@@ -22,28 +22,38 @@ prontera,164,108,3	script	Stylist#custom_stylist	864,{
 		//LOOK_CLOTHES_COLOR,
 		LOOK_HAIR,
 		LOOK_HAIR_COLOR;
-//	set .@s, select(" ~ Cloth color: ~ Hairstyle: ~ Hair color");
+
+	// 設定選項，這裡只保留“髮型”和“髮色”兩個選項
 	set .@s, select(" ~ Hairstyle: ~ Hair color");
 	set .@Revert, getlook(.@Look[.@s]);
 	set .@Style,1;
+
 	while(1) {
+		// 設定角色的外觀
 		setlook .@Look[.@s], .@Style;
-		message strcharinfo(0),"This is style #"+.@Style+".";
-		set .@menu$, " ~ Next (^0055FF"+((.@Style!=.@Styles[.@s])?.@Style+1:1)+"^000000): ~ Previous (^0055FF"+((.@Style!=1)?.@Style-1:.@Styles[.@s])+"^000000): ~ Jump to...: ~ Revert to original (^0055FF"+.@Revert+"^000000)";
+		message strcharinfo(0),"這是樣式 #" + .@Style + "。";
+		
+		// 顯示選單供玩家選擇
+		set .@menu$, " ~ Next (^0055FF" + ((.@Style != .@Styles[.@s]) ? .@Style + 1 : 1) + "^000000): ~ Previous (^0055FF" + ((.@Style != 1) ? .@Style - 1 : .@Styles[.@s]) + "^000000): ~ Jump to...: ~ Revert to original (^0055FF" + .@Revert + "^000000)";
+		
 		switch(select(.@menu$)) {
 		case 1:
-			set .@Style, ((.@Style != .@Styles[.@s]) ? .@Style+1 : 1);
+			// 下一個樣式
+			set .@Style, ((.@Style != .@Styles[.@s]) ? .@Style + 1 : 1);
 			break;
 		case 2:
-			set .@Style, ((.@Style != 1) ? .@Style-1 : .@Styles[.@s]);
+			// 上一個樣式
+			set .@Style, ((.@Style != 1) ? .@Style - 1 : .@Styles[.@s]);
 			break;
 		case 3:
-			message strcharinfo(0),"Choose a style between 1 - "+.@Styles[.@s]+".";
-			input .@Style,0,.@Styles[.@s];
-			if (!.@Style)
-				set .@Style, rand(1,.@Styles[.@s]);
+			// 請求玩家輸入樣式編號
+			message strcharinfo(0), "選擇樣式範圍是 1 - " + .@Styles[.@s] + "。";
+			input .@Style, 0, .@Styles[.@s];
+			if (!.@Style) // 如果玩家沒有輸入，隨機選擇樣式
+				set .@Style, rand(1, .@Styles[.@s]);
 			break;
 		case 4:
+			// 恢復到原始樣式
 			set .@Style, .@Revert;
 			setlook .@Look[.@s], .@Revert;
 			break;

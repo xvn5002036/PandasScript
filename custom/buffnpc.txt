@@ -1,4 +1,4 @@
-prontera,146,103,5	script	Heal and Buff	677,{
+prontera,146,103,5	script	補血及加狀態	677,{
 
 percentheal 100,100;
 //skilleffect 384,0; sc_start SC_MELTDOWN,3600000,5;

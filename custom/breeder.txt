@@ -10,18 +10,18 @@
 //= One-click automatic mount rentals.
 //============================================================
 
-prontera,164,98,3	script	Universal Rental NPC	657,{
+prontera,164,98,3	script	通用租賃 NPC	657,{
 	if (ismounting()) {
-		message strcharinfo(0),"You must first remove your mount.";
+		message strcharinfo(0),"您必須先卸下騎乘物。";
 		end;
 	} else if (((eaclass()&EAJ_THIRDMASK)==EAJ_RANGER) && !countitem(6124)) {
 		if (!checkfalcon() && getskilllv("HT_FALCON") && !checkwug()) {
-			if(select(" ~ Falcon: ~ Warg")==1) setfalcon;
-			else getitem 6124,1; //Wolf's_Flute
-		} else getitem 6124,1; //Wolf's_Flute
+			if(select(" ~ 鷹: ~ 狼")==1) setfalcon;
+			else getitem 6124,1; //狼的笛子
+		} else getitem 6124,1; //狼的笛子
 	} else if (((eaclass()&EAJ_THIRDMASK)==EAJ_MECHANIC) && !checkcart() && getskilllv("MC_PUSHCART")) {
 		if (!checkmadogear() && getskilllv("NC_MADOLICENCE")) {
-			if(select(" ~ Cart: ~ Mado")==1) setcart;
+			if(select(" ~ 車: ~ 摩托")==1) setcart;
 			else setmadogear;
 		} else setcart;
 	} else if (!checkcart() && getskilllv("MC_PUSHCART")) setcart;
@@ -31,7 +31,7 @@ prontera,164,98,3	script	Universal Rental NPC	657,{
 		else setriding;
 	} else if (!checkmadogear() && getskilllv("NC_MADOLICENCE")) setmadogear;
 	else {
-		message strcharinfo(0),"You do not meet requirements to rent.";
+		message strcharinfo(0),"您不符合租賃的要求。";
 		end;
 	}
 	specialeffect2 EF_TEIHIT3;
