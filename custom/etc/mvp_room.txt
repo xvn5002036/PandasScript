@@ -13,61 +13,61 @@
 //= 1.0 First version, edited. [Euphy]
 //============================================================
 
-prontera,147,113,5	script	Private MVP Room	10058,{
-	mes "[Private MVP Room]";
-	mes "Please select a private MVP room.";
+prontera,147,113,5	script	私人 MVP 房間	10058,{
+	mes "[私人 MVP 房間]";
+	mes "請選擇一個私人 MVP 房間。";
 	if ( getvariableofnpc( .rentcost, "MVP Summoner" ) )
-		mes "The cost to rent a room for "+ getvariableofnpc( .timeout, "MVP Summoner" ) +" minutes is "+ callfunc("F_InsertComma", getvariableofnpc( .rentcost, "MVP Summoner" ) ) +" zeny.";
+		mes "租用房間 "+ getvariableofnpc( .timeout, "MVP Summoner" ) +" 分鐘的費用是 "+ callfunc("F_InsertComma", getvariableofnpc( .rentcost, "MVP Summoner" ) ) +" 錢。";
 	else
-		mes "You can only use the room for only "+ getvariableofnpc( .timeout, "MVP Summoner" ) +" minutes.";
+		mes "您只能使用這個房間 "+ getvariableofnpc( .timeout, "MVP Summoner" ) +" 分鐘。";
 	mes " ";
 	for ( .@i = 1; .@i <= 8; .@i++ )
 		if ( getvariableofnpc( .renttime[.@i], "MVP Summoner" ) )
-			mes "Room #"+ .@i +" = "+ .color$[ .type[.@i] ] + .whoinuse$[.@i] +"^000000";
+			mes "房間 #"+ .@i +" = "+ .color$[ .type[.@i] ] + .whoinuse$[.@i] +"^000000";
 	next;
 	.@room = select(
-		"MVP Room 1 ["+ getmapusers("06guild_01") +"]",
-		"MVP Room 2 ["+ getmapusers("06guild_02") +"]",
-		"MVP Room 3 ["+ getmapusers("06guild_03") +"]",
-		"MVP Room 4 ["+ getmapusers("06guild_04") +"]",
-		"MVP Room 5 ["+ getmapusers("06guild_05") +"]",
-		"MVP Room 6 ["+ getmapusers("06guild_06") +"]",
-		"MVP Room 7 ["+ getmapusers("06guild_07") +"]",
-		"MVP Room 8 ["+ getmapusers("06guild_08") +"]");
+		"MVP 房間 1 ["+ getmapusers("06guild_01") +"]",
+		"MVP 房間 2 ["+ getmapusers("06guild_02") +"]",
+		"MVP 房間 3 ["+ getmapusers("06guild_03") +"]",
+		"MVP 房間 4 ["+ getmapusers("06guild_04") +"]",
+		"MVP 房間 5 ["+ getmapusers("06guild_05") +"]",
+		"MVP 房間 6 ["+ getmapusers("06guild_06") +"]",
+		"MVP 房間 7 ["+ getmapusers("06guild_07") +"]",
+		"MVP 房間 8 ["+ getmapusers("06guild_08") +"]");
 	if ( getvariableofnpc( .renttime[.@room], "MVP Summoner" ) ) {
 		if ( .inuseid[.@room] == getcharid( .type[.@room] ) ) {
 			warp "06guild_0"+ .@room, 0,0;
 			close;
 		} else {
-			mes "[Private MVP Room]";
-			mes "This room is reserved for ";
-			mes .color$[ .type[.@room] ] + .whoinuse$[.@room] +"^000000.";
-			mes "Please select another.";
+			mes "[私人 MVP 房間]";
+			mes "這個房間已預定給 ";
+			mes .color$[ .type[.@room] ] + .whoinuse$[.@room] +"^000000。";
+			mes "請選擇其他房間。";
 			close;
 		}
 	}
-	mes "[Private MVP Room]";
-	mes "Reserve this room for...";
+	mes "[私人 MVP 房間]";
+	mes "預定這個房間...";
 	next;
-	set .@type, select( "For my party members", "For my guild members", "For personal account use" );
+	set .@type, select( "供我的隊伍成員使用", "供我的公會成員使用", "供個人賬號使用" );
 	if ( !getcharid(.@type) ) {
-		mes "[Private MVP Room]";
-		mes "You do not own a "+( ( .@type == 1 )? "Party" : "Guild" )+".";
+		mes "[私人 MVP 房間]";
+		mes "您不擁有 "+( ( .@type == 1 )? "隊伍" : "公會" )+"。";
 		close;
 	}
 	else if ( Zeny < getvariableofnpc( .rentcost, "MVP Summoner" ) ) {
-		mes "You don't have enough zeny to rent a room.";
+		mes "您沒有足夠的錢租用這個房間。";
 		close;
 	}
 	else if ( getvariableofnpc( .renttime[.@room], "MVP Summoner" ) ) {
-		mes "[Private MVP Room]";
-		mes "I'm sorry, somebody else has already registered this room faster than you.";
+		mes "[私人 MVP 房間]";
+		mes "對不起，其他人已經比您更快地註冊了這個房間。";
 		close;
 	}
 	for ( .@i = 1; .@i <= 8; .@i++ ) {
 		if ( ( getvariableofnpc( .renttime[.@i], "MVP Summoner" ) ) && .@type == .type[.@i] && getcharid(.@type) == .inuseid[.@i] ) {
-			mes "[Private MVP Room]";
-			mes "You already rented Room#"+ .@i +". Use that room instead.";
+			mes "[私人 MVP 房間]";
+			mes "您已經租用了 房間#"+ .@i +". 請使用那個房間。";
 			close;
 		}
 	}
@@ -80,24 +80,27 @@ prontera,147,113,5	script	Private MVP Room	10058,{
 	donpcevent "MVP Summoner#"+ .@room +"::OnEnterMap";
 	close;
 OnInit:
-	.color$[1] =  "^EE8800"; // party color
-	.color$[2] =  "^70CC11"; // guild color
-	.color$[3] =  "^0000FF"; // account color
+	.color$[1] =  "^EE8800"; // 隊伍顏色
+	.color$[2] =  "^70CC11"; // 公會顏色
+	.color$[3] =  "^0000FF"; // 賬號顏色
 	end;
 }
 
+
 -	script	MVP Summoner	-1,{
-	mes "[MVP Summoner]";
-	mes "Time left: " + callfunc( "Time2Str", .renttime[ atoi( strnpcinfo(2) ) ] + .timeout * 60 );
-	mes "Hi, what can I do for you?";
-	next;
-	switch ( select(.menu$) ) {
-	case 1:
-		mes "[MVP Summoner]";
-		if ( mobcount( "this", strnpcinfo(3)+"::OnMobDead" ) ) {
-			mes "I cannot offer heal service when there are monsters around.";
-			close;
-		}
+mes "[MVP 召喚者]";
+mes "剩餘時間: " + callfunc( "Time2Str", .renttime[ atoi( strnpcinfo(2) ) ] + .timeout * 60 );
+mes "你好，有什麼我可以幫你嗎?";
+next;
+switch ( select(.menu$) ) {
+case 1:
+	mes "[MVP 召喚者]";
+	if ( mobcount( "this", strnpcinfo(3)+"::OnMobDead" ) ) {
+		mes "在有怪物的情況下我無法提供治療服務.";
+		close;
+	}
+
+
 		sc_end SC_STONE;
 		sc_end SC_SLOWDOWN;
 		sc_end SC_FREEZE;
@@ -122,28 +125,29 @@ OnInit:
 		sc_end SC_SKA;
 		percentheal 100,100;
 		specialeffect2 EF_HEAL;
-		mes "You are completely healed.";
+		mes "你已經完全康復了。";
+		
 		close;
 	case 2:
 		if ( mobcount( "this", strnpcinfo(3)+"::OnMobDead" ) ) {
-			mes "[MVP Summoner]";
-			mes "I cannot summon another MVP when there are monsters around.";
+			mes "[MVP 召喚者]";
+			mes "當周圍有怪物時，我無法召喚另一個 MVP。";
 			close;
 		} else if ( .mvpcost ) {
-			mes "[MVP Summoner]";
-			mes "The cost to summon an MVP is "+ callfunc( "F_InsertComma", .mvpcost ) +" zeny.";
+			mes "[MVP 召喚者]";
+			mes "召喚 MVP 的費用是 "+ callfunc( "F_InsertComma", .mvpcost ) +" 銀幣。";
 			next;
 			set .@menu, select(.mvpid_menu$) -1;
-			mes "[MVP Summoner]";
+			mes "[MVP 召喚者]";
 			if ( Zeny < .mvpcost ) {
-				mes "You don't have enough zeny to summon an MVP.";
+				mes "你沒有足夠的銀幣來召喚 MVP。";
 				close;
 			}
 		} else {
 			set .@menu, select(.mvpid_menu$) -1;
-			mes "[MVP Summoner]";
+			mes "[MVP 召喚者]";
 		}
-		mes "Please get ready.";
+		mes "請準備好。";
 		close2;
 		if ( Zeny < .mvpcost ) end;
 		Zeny -= .mvpcost;
@@ -151,24 +155,24 @@ OnInit:
 		end;
 	case 3:
 		if ( mobcount( "this", strnpcinfo(3)+"::OnMobDead" ) ) {
-			mes "[MVP Summoner]";
-			mes "I cannot summon another mini-boss when there are monsters around.";
+			mes "[MVP 召喚者]";
+			mes "當周圍有怪物時，我無法召喚另一個迷你 Boss。";
 			close;
 		} else if ( .bosscost ) {
-			mes "[MVP Summoner]";
-			mes "The cost to summon a mini-boss is "+ callfunc( "F_InsertComma", .bosscost ) +" zeny.";
+			mes "[MVP 召喚者]";
+			mes "召喚迷你 Boss 的費用是 "+ callfunc( "F_InsertComma", .bosscost ) +" 銀幣。";
 			next;
 			set .@menu, select(.bossid_menu$) -1;
-			mes "[MVP Summoner]";
+			mes "[MVP 召喚者]";
 			if ( Zeny < .bosscost ) {
-				mes "You doesn't have enough zeny to summon a mini-boss.";
+				mes "你沒有足夠的銀幣來召喚迷你 Boss。";
 				close;
 			}
 		} else {
 			set .@menu, select(.bossid_menu$) -1;
-			mes "[MVP Summoner]";
+			mes "[MVP 召喚者]";
 		}
-		mes "Please get ready.";
+		mes "請準備好。";
 		close2;
 		if ( Zeny < .bosscost ) end;
 		Zeny -= .bosscost;
@@ -176,31 +180,31 @@ OnInit:
 		end;
 	case 4:
 		if ( mobcount( "this", strnpcinfo(3)+"::OnMobDead" ) > 0 ) {
-			mes "[MVP Summoner]";
-			mes "I cannot offer this service when there are monsters around.";
+			mes "[MVP 召喚者]";
+			mes "當周圍有怪物時，我無法提供這項服務。";
 			close;
 		}
 		close2;
 		callshop "MVP room#branch", 1;
 		end;
 	case 5:
-		mes "[MVP Summoner]";
-		mes "Are you sure you want to leave this room?";
+		mes "[MVP 召喚者]";
+		mes "你確定要離開這個房間嗎？";
 		next;
-		if ( select( "Yes:No") == 1 )
+		if ( select( "是:否") == 1 )
 			warp .respawnmap$, .respawnx, .respawny;
 		close;
 	case 6:
-		mes "[MVP Summoner]";
+		mes "[MVP 召喚者]";
 		if ( getmapusers( strcharinfo(3) ) > 1 ) {
-			mes "There are still some players in this room. Make sure you are the last member in this room to use this option.";
+			mes "這個房間裡仍然有其他玩家。確保在使用此選項時你是最後一位成員。";
 			close;
 		}
-		mes "Are you sure you want to give up this room?";
+		mes "你確定要放棄這個房間嗎？";
 		if ( .rentcost )
-			mes "You will need to pay again to enter this room.";
+			mes "你需要再次付款才能進入這個房間。";
 		next;
-		if ( select( "Yes", "No" ) == 2 ) close;
+		if ( select( "是", "否" ) == 2 ) close;
 		awake strnpcinfo(0);
 		end;
 	}
@@ -221,115 +225,115 @@ OnEnterMap:
 OnInit:
 	if ( !getstrlen( strnpcinfo(2) ) ) {
 
-//	Config ---------------------------------------------------------------------------------------
+//	配置 ---------------------------------------------------------------------------------------
 
-	// Room rental time, in minutes.
-	// When time runs out, all players inside the room will be kicked out.
-	// Do NOT set this to zero!
+	// 房間租賃時間，以分鐘計。
+	// 當時間結束時，所有在房間內的玩家將被踢出。
+	// 絕對不要設置為零！
 	set .timeout, 60;
 
-	set .rentcost, 100000;	// Zeny cost for renting a room (0 = free)
-	set .mvpcost, 100000;	// Zeny cost to summon an MVP (0 = free)
-	set .bosscost, 50000;	// Zeny cost to summon a boss monster (0 = free)
+	set .rentcost, 100000;	// 租賃房間的銀幣費用 (0 = 免費)
+	set .mvpcost, 100000;	// 召喚 MVP 的銀幣費用 (0 = 免費)
+	set .bosscost, 50000;	// 召喚 Boss 怪物的銀幣費用 (0 = 免費)
 
-	//	Options setting inside MVP room
-	set .@menu[1], 1;	// Turn Heal option On/Off
-	set .@menu[2], 1;	// Turn MVP Summoning On/Off
-	set .@menu[3], 1;	// Turn Mini boss Summoning On/Off
-	set .@menu[4], 0;	// Sell items (branches) On/Off (see shop below, before the mapflags)
+	// 在 MVP 房間內的選項設置
+	set .@menu[1], 1;	// 打開/關閉治療選項
+	set .@menu[2], 1;	// 打開/關閉 MVP 召喚
+	set .@menu[3], 1;	// 打開/關閉小型 Boss 召喚
+	set .@menu[4], 0;	// 銷售物品（分支）開/關（參見下面的商店，位於地圖標誌之前）
 
-	// Respawn point when players leave the room
+	// 玩家離開房間後的重生點
 	set .respawnmap$, "prontera";
 	set .respawnx, 150;
 	set .respawny, 174;
 
 	setarray .mvpid[0],
-		1511,//	Amon Ra
-		1647,// Assassin Cross Eremes
-		1785,//	Atroce
-		1630,//	Bacsojin
-		1039,//	Baphomet
-		1874,//	Beelzebub
-		1272,//	Dark Lord
-		1719,//	Datale
-		1046,//	Doppelgangger
-		1389,//	Dracula
-		1112,//	Drake
-		1115,//	Eddga
-		1418,//	Evil Snake Lord
-		1871,//	Fallen Bishop
-		1252,//	Garm
-		1768,//	Gloom Under Night
-		1086,//	Golden Thief Bug
-		1885,//	Gopinich
-		1649,// High Priest Magaleta
-		1651,// High Wizard Katrinn
-		1832,//	Ifrit
-		1492,//	Incantation Samurai
-		1734,//	Kiel D-01
-		1251,//	Knight of Windstorm
-		1779,//	Ktullanux
-		1688,//	Lady Tanee
-		1646,// Lord Knight Seyren
-		1373,//	Lord of Death
-		1147,//	Maya
-		1059,//	Mistress
-		1150,//	Moonlight Flower
-		1087,//	Orc Hero
-		1190,//	Orc Lord
-		1038,//	Osiris
-		1157,//	Pharaoh
-		1159,//	Phreeoni
-		1623,//	RSX 0806
-		1650,// Sniper Shecil
-		1583,//	Tao Gunka
-		1708,//	Thanatos
-		1312,//	Turtle General
-		1751,//	Valkyrie Randgris
-		1685,// Vesper
-		1648,// Whitesmith Harword
-		1917,// Wounded Morocc
-		1658;//	Ygnizem
+	1511,//	Amon Ra（阿蒙·拉）
+	1647,// Assassin Cross Eremes（刺客十字艾瑞梅斯）
+	1785,//	Atroce（阿特羅斯）
+	1630,//	Bacsojin（巴克索金）
+	1039,//	Baphomet（巴風特）
+	1874,//	Beelzebub（別西卜）
+	1272,//	Dark Lord（黑暗領主）
+	1719,//	Datale（達泰爾）
+	1046,//	Doppelgangger（雙胞胎）
+	1389,//	Dracula（德古拉）
+	1112,//	Drake（德瑞克）
+	1115,//	Eddga（埃德加）
+	1418,//	Evil Snake Lord（邪惡蛇領主）
+	1871,//	Fallen Bishop（墮落主教）
+	1252,//	Garm（卡爾姆）
+	1768,//	Gloom Under Night（夜暗之下）
+	1086,//	Golden Thief Bug（金盜蟲）
+	1885,//	Gopinich（戈皮尼奇）
+	1649,// High Priest Magaleta（高級祭司馬加雷塔）
+	1651,// High Wizard Katrinn（高級巫師卡特琳）
+	1832,//	Ifrit（伊夫利特）
+	1492,//	Incantation Samurai（咒語武士）
+	1734,//	Kiel D-01（基爾 D-01）
+	1251,//	Knight of Windstorm（風暴騎士）
+	1779,//	Ktullanux（克圖拉納克斯）
+	1688,//	Lady Tanee（塔妮女士）
+	1646,// Lord Knight Seyren（領主騎士塞耶倫）
+	1373,//	Lord of Death（死亡之主）
+	1147,//	Maya（瑪雅）
+	1059,//	Mistress（女主人）
+	1150,//	Moonlight Flower（月光花）
+	1087,//	Orc Hero（綠皮英雄）
+	1190,//	Orc Lord（綠皮領主）
+	1038,//	Osiris（奧西里斯）
+	1157,//	Pharaoh（法老）
+	1159,//	Phreeoni（普瑞歐尼）
+	1623,//	RSX 0806（RSX 0806）
+	1650,// Sniper Shecil（狙擊手謝西爾）
+	1583,//	Tao Gunka（陶·古卡）
+	1708,//	Thanatos（塔納托斯）
+	1312,//	Turtle General（烏龜將軍）
+	1751,//	Valkyrie Randgris（女武神蘭德格瑞斯）
+	1685,// Vesper（維斯帕）
+	1648,// Whitesmith Harword（白匠哈沃德）
+	1917,// Wounded Morocc（受傷的摩洛克）
+	1658;//	Ygnizem（依格尼澤姆）
 
 	setarray .bossid[0],
-		1096,// Angeling
-		1388,// Archangeling
-		1795,// Bloody Knight
-		1830,// Bow Guardian
-		1839,// Byorgue
-		1309,// Cat O' Nine Tail
-		1283,// Chimera
-		1302,// Dark Illusion
-		1198,// Dark Priest
-		1582,// Deviling
-		1091,// Dragon Fly
-		1093,// Eclipse
-		1205,// Executioner
-		1783,// Galion
-		1592,// Gangster
-		1120,// Ghostring
-		1259,// Gryphon
-		1720,// Hydro
-		1090,// Mastering
-		1289,// Maya Purple
-		1262,// Mutant Dragon
-		1203,// Mysteltainn
-		1870,// Necromancer
-		1295,// Owl Baron
-		1829,// Sword Guardian
-		1204,// Tirfing
-		1089,// Toad
-		1092,// Vagabond Wolf
-		1765;// Valkyrie
+	1096,// Angeling（天使）
+	1388,// Archangeling（大天使）
+	1795,// Bloody Knight（血腥騎士）
+	1830,// Bow Guardian（弓箭守護者）
+	1839,// Byorgue（比爾格）
+	1309,// Cat O' Nine Tail（九尾貓）
+	1283,// Chimera（奇美拉）
+	1302,// Dark Illusion（黑暗幻影）
+	1198,// Dark Priest（黑暗祭司）
+	1582,// Deviling（小惡魔）
+	1091,// Dragon Fly（蜻蜓）
+	1093,// Eclipse（日食）
+	1205,// Executioner（刽子手）
+	1783,// Galion（加里昂）
+	1592,// Gangster（黑幫分子）
+	1120,// Ghostring（鬼環）
+	1259,// Gryphon（獅鷲獸）
+	1720,// Hydro（水生生物）
+	1090,// Mastering（掌控者）
+	1289,// Maya Purple（紫色瑪雅）
+	1262,// Mutant Dragon（變種龍）
+	1203,// Mysteltainn（神秘劍）
+	1870,// Necromancer（死靈法師）
+	1295,// Owl Baron（貓頭鷹男爵）
+	1829,// Sword Guardian（劍守護者）
+	1204,// Tirfing（提爾芬）
+	1089,// Toad（蟾蜍）
+	1092,// Vagabond Wolf（流浪狼）
+	1765;// Valkyrie（女武神）
 
 //	Config Ends ------------------------------------------------------------------------
 
 		if ( !.timeout ) set .timeout, 60;
-		.menu$ = ( .@menu[1] ? "Heal" : "" ) +":" ;
-		.menu$ = .menu$ + ( .@menu[2] ? "Summon MVP" : "" ) +":";
-		.menu$ = .menu$ + ( .@menu[3] ? "Summon Mini-boss" : "" ) +":";
-		.menu$ = .menu$ + ( .@menu[4] ? "Buy branches" : "" ) +":";
-		.menu$ = .menu$ + "Leave this room:Give up this room";
+			.menu$ = ( .@menu[1] ? "治療" : "" ) +":" ;
+			.menu$ = .menu$ + ( .@menu[2] ? "召喚 MVP" : "" ) +":";
+			.menu$ = .menu$ + ( .@menu[3] ? "召喚小首領" : "" ) +":";
+			.menu$ = .menu$ + ( .@menu[4] ? "購買樹枝" : "" ) +":";
+			.menu$ = .menu$ + "離開這個房間:放棄這個房間";
 		if ( .@menu[2] ) {
 			.@size = getarraysize( .mvpid );
 			for ( .@i = 0; .@i < .@size; .@i++ )
@@ -341,23 +345,27 @@ OnInit:
 				.bossid_menu$ = .bossid_menu$ + getmonsterinfo( .bossid[.@i], MOB_NAME ) +":";
 		}
 	}
-	else {
-		mapannounce strnpcinfo(4), "An administrator has refreshed the server. Please re-register this room.", bc_map;
-		mapwarp strnpcinfo(4), .respawnmap$, .respawnx, .respawny;
-	}
-	end;
+else {
+	// 向地圖上的所有玩家發送公告，通知他們伺服器已經由管理員刷新。
+	mapannounce strnpcinfo(4), "管理員已刷新伺服器，請重新註冊該房間。", bc_map;
+
+	// 將玩家傳送到指定的重生地圖及坐標。
+	mapwarp strnpcinfo(4), .respawnmap$, .respawnx, .respawny;
+}
+end;
+
 }
 
 -	shop	MVP room#branch	-1,604:100000,12103:1000000
 
-06guild_01,49,49,4	duplicate(MVP Summoner)	MVP Summoner#1	116
-06guild_02,49,49,4	duplicate(MVP Summoner)	MVP Summoner#2	116
-06guild_03,49,49,4	duplicate(MVP Summoner)	MVP Summoner#3	116
-06guild_04,49,49,4	duplicate(MVP Summoner)	MVP Summoner#4	116
-06guild_05,49,49,4	duplicate(MVP Summoner)	MVP Summoner#5	116
-06guild_06,49,49,4	duplicate(MVP Summoner)	MVP Summoner#6	116
-06guild_07,49,49,4	duplicate(MVP Summoner)	MVP Summoner#7	116
-06guild_08,49,49,4	duplicate(MVP Summoner)	MVP Summoner#8	116
+06guild_01,49,49,4	duplicate(MVP Summoner)	 MVP 召喚者#1	116
+06guild_02,49,49,4	duplicate(MVP Summoner)	 MVP 召喚者#2	116
+06guild_03,49,49,4	duplicate(MVP Summoner)	 MVP 召喚者#3	116
+06guild_04,49,49,4	duplicate(MVP Summoner)	 MVP 召喚者#4	116
+06guild_05,49,49,4	duplicate(MVP Summoner)	 MVP 召喚者#5	116
+06guild_06,49,49,4	duplicate(MVP Summoner)	 MVP 召喚者#6	116
+06guild_07,49,49,4	duplicate(MVP Summoner)	 MVP 召喚者#7	116
+06guild_08,49,49,4	duplicate(MVP Summoner)	 MVP 召喚者#8	116
 
 06guild_01	mapflag	nowarpto
 06guild_02	mapflag	nowarpto

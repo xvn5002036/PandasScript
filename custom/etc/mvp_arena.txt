@@ -17,25 +17,26 @@
 //============================================================
 
 // Entrance
-prontera,147,116,5	script	MVP Warper	10194,{
-	mes "[ ^0065DFMVP Warper^000000 ]";
-	mes "Would you like to enter";
-	mes "the MVP Arena?";
-	if (select("Yes!","No thanks.") == 2) close;
+prontera,147,116,5	script	MVP 傳送者	10194,{
+	mes "[ ^0065DFMVP 傳送者^000000 ]";
+	mes "你想要進入";
+	mes "MVP 體育場嗎？";
+	if (select("是！","不，謝謝。") == 2) close;
 	warp "quiz_00",50,24;
 	close;
 }
 
+
 // Information
-quiz_00,49,31,4	script	MVP Arena Guide	778,{
-	mes "[ ^0065DFMVP Arena Guide^000000 ]";
-	mes "Welcome and behold this sacred place. Here you will find out if you truly have what it takes to call yourself a warrior.";
+quiz_00,49,31,4	script	MVP Arena 指南	778,{
+	mes "[ ^0065DFMVP Arena 指南^000000 ]";
+	mes "歡迎來到這個神聖的地方。在這裡你將發現自己是否真的有資格稱自己為戰士。";
 	next;
-	switch(select("Information","Heal me!","Return to Prontera","Cancel")) {
+	switch(select("資訊","為我治療！","返回普隆德拉","取消")) {
 	case 1:
-		mes "[ ^0065DFMVP Arena Guide^000000 ]";
-		mes "There are four Keepers, and each can spawn four different MVPs.";
-		mes "There are eight rooms per Keeper, and sixteen MVPs in total.";
+		mes "[ ^0065DFMVP Arena 指南^000000 ]";
+		mes "這裡有四個守護者，每個守護者可以召喚四個不同的 MVP。";
+		mes "每個守護者有八個房間，總共有十六個 MVP。";
 		close;
 	case 2:
 		specialeffect2 EF_HEAL2;
@@ -51,41 +52,42 @@ quiz_00,49,31,4	script	MVP Arena Guide	778,{
 
 // Keepers
 function	script	Keeper	{
-	set .@arg, getarg(0);
-	mes "[ ^0065DF"+strnpcinfo(1)+"^000000 ]";
-	mes "Which arena would you";
-	mes "like to enter?";
-	for(set .@i,1; .@i<9; set .@i,.@i+1)
-		set .@menu$, .@menu$+"Arena "+.@i+" ["+getmapusers("pvp_n_"+.@i+"-"+.@arg)+"/20]:";
-	set .@i, select(.@menu$);
-	if (getmapusers("pvp_n_"+.@i+"-"+ .@arg)>19) {
-		mes "[ ^0065DF"+strnpcinfo(1)+"^000000 ]";
-		mes "Sorry, this arena is full!";
-		close;
+	set .@arg, getarg(0);  // 設置變量 .@arg，等於函數的第一個參數
+	mes "[ ^0065DF"+strnpcinfo(1)+"^000000 ]";  // 生成 NPC 名字的顏色標籤
+	mes "你想進入哪個競技場？";  // 提問用戶
+	for(set .@i,1; .@i<9; set .@i,.@i+1)  // 循環從1到8（總共8個競技場）
+		set .@menu$, .@menu$+"競技場 "+.@i+" ["+getmapusers("pvp_n_"+.@i+"-"+.@arg)+"/20]:";  // 生成選單顯示每個競技場的使用人數
+	set .@i, select(.@menu$);  // 顯示選單並讓玩家選擇競技場
+	if (getmapusers("pvp_n_"+.@i+"-"+ .@arg)>19) {  // 檢查選擇的競技場是否已滿
+		mes "[ ^0065DF"+strnpcinfo(1)+"^000000 ]";  // 顯示 NPC 名字的顏色標籤
+		mes "抱歉，這個競技場已滿！";  // 通知玩家競技場已滿
+		close;  // 關閉對話
 	}
-	warp "pvp_n_"+.@i+"-"+ .@arg,102,102;
-	close;
+	warp "pvp_n_"+.@i+"-"+ .@arg,102,102;  // 傳送玩家到選擇的競技場座標
+	close;  // 關閉對話
 }
+
 quiz_00,56,31,4	script	Alpha MVP	770,{ callfunc "Keeper",2; }
 quiz_00,58,31,4	script	Beta MVP	773,{ callfunc "Keeper",3; }
 quiz_00,60,31,4	script	Theta MVP	774,{ callfunc "Keeper",4; }
 quiz_00,62,31,4	script	Epsilon MVP	776,{ callfunc "Keeper",5; }
 
 // Protectors
-function	script	Protector	{
-	switch(select(""+((getarg(0)=="")?"":"Harder Monsters")+":Heal:Exit")) {
-	case 1:
-		warp getarg(0),102,102;
-		end;
-	case 2:
-		specialeffect2 EF_HEAL2;
-		percentheal 100,100;
-		end;
-	case 3:
-		warp "prontera",156,179;
-		end;
+function	script	Protector	{  // 定義了一個名為 Protector 的腳本函數
+	switch(select(""+((getarg(0)=="")?"":"Harder Monsters")+":Heal:Exit")) {  // 顯示選單，根據 getarg(0) 的值決定選項
+	case 1:  // 當用戶選擇了 "Harder Monsters"（更難的怪物）選項
+		warp getarg(0),102,102;  // 使角色傳送到 getarg(0) 指定的地圖，坐標是 (102, 102)
+		end;  // 結束程式
+	case 2:  // 當用戶選擇 "Heal"（治療）選項
+		specialeffect2 EF_HEAL2;  // 播放治療特效
+		percentheal 100,100;  // 使角色的生命值恢復 100%
+		end;  // 結束程式
+	case 3:  // 當用戶選擇 "Exit"（退出）選項
+		warp "prontera",156,179;  // 使角色傳送到 "prontera" 地圖，坐標是 (156, 179)
+		end;  // 結束程式
 	}
 }
+
 pvp_n_1-2,100,100,4	script	MVP-Protector#01	727,{ callfunc "Protector","pvp_n_2-2"; }
 pvp_n_2-2,100,100,4	script	MVP-Protector#02	727,{ callfunc "Protector","pvp_n_3-2"; }
 pvp_n_3-2,100,100,4	script	MVP-Protector#03	727,{ callfunc "Protector","pvp_n_4-2"; }
